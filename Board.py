@@ -137,6 +137,22 @@ class Board:
         # we know there's no winner, but if the board is full, there game is still over
         return self.isFull()
 
+    def __eq__(self, other: Board) -> bool:
+        """
+        Two Boards are considered equivalent if their layout is exactly the same
+        :param other: the Board to compare against
+        :return: True if the Boards are equivalent, False otherwise
+        """
+        return self._state == other._state
+
+    def __ne__(self, other: Board) -> bool:
+        """
+        Two Boards are considered different if any spot is different
+        :param other: the Board to compare against
+        :return: True if the Boards are different, False otherwise
+        """
+        return not self == other
+
     def __repr__(self) -> str:
         """
         :return: The string representation of the board

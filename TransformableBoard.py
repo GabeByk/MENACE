@@ -3,6 +3,7 @@
 # CS481
 # TransformableBoard.py
 #
+from __future__ import annotations
 from Board import Board
 
 class TransformableBoard(Board):
@@ -39,6 +40,7 @@ class TransformableBoard(Board):
         """
         Rotates the board clockwise 90 * n degrees; negative numbers rotate counter-clockwise
         :param n: the number of times to rotate 90 degrees clockwise
+            NOTE: rotate(i) and rotate(-i) cancel
         """
         for i in range(n % 4):
             self.rotateOne()
@@ -58,11 +60,39 @@ class TransformableBoard(Board):
         :param n: the number of times to rotate 45 degrees clockwise starting from vertical
             i.e. 0 is the vertical axis (|), 1 is the "positive" diagonal (/), 2 is horizontal (-),
             3 is the other diagonal (\). You can also think of n as the index of "|/-\".
+            NOTE: flip(i) and flip(-i) don't always cancel; flip(1) is / and flip(-1) is \;
+            they don't cancel. To cancel, flip(i) twice.
         """
         # i tried it with a prop; flipping about the vertical axis and then rotating 90 degrees clockwise n times
         # is the same as flipping about the desired axis
         self.flipVertical()
         self.rotate(n)
+
+    def __eq__(self, other: TransformableBoard) -> bool:
+        """
+        Two TransformableBoards are considered equivalent if they are equivalent up to symmetry;
+        for example, a board with a single O in any corner is considered equivalent to any other board with
+        one O in any other corner.
+        :param other: the TransformableBoard to compare against
+        :return: True if the two TransformableBoards are equivalent up to symmetry, False otherwise
+        """
+        # compare self against the transformations of other
+        equivalent = False
+        for i in range(4):
+            # test rotation of i
+            other.rotate(i)
+            equivalent = equivalent or self._state == other._state
+            # restore other to its previous state
+            other.rotate(-i)
+            if equivalent:
+                return True
+            # test flip of i
+            other.flip(i)
+            equivalent = equivalent or self._state == other._state
+            # return other to its previous state
+            other.flip(i)
+            if equivalent:
+                return True
 
 def rotate(b: TransformableBoard, n: int):
     b.rotate(n)
@@ -75,35 +105,71 @@ def flip(b: TransformableBoard, n: int):
     print()
 
 def main():
-    b = TransformableBoard()
+    b1 = TransformableBoard()
+    b2 = TransformableBoard()
+    b3 = TransformableBoard()
     for y in range(3):
         for x in range(3):
             # board should be 1 2 3 / 4 5 6 / 7 8 9
-            b.addMove(f"{3 * y + x + 1}", (x, y))
-    rotate(b, 0)
+            num = 3 * y + x + 1
+            # no matter what transformations we do, b1 and b2 are equal
+            b1.addMove(f"{num}", (x, y))
+            b2.addMove(f"{num}", (x, y))
+            # since we moved the center, no transformation will make b1 or b2 equal b3
+            b3.addMove(f"{num}", ((x + 1) % 3, (y + 1) % 3))
+
+    # test rotations
+    print("Now rotating!\n")
+    rotate(b1, 0)
 
     for i in range(4):
-        b.rotateOne()
-        print(b)
+        b1.rotateOne()
+        print(b1)
         print()
 
-    rotate(b, -4)
-    rotate(b, -1)
-    rotate(b, 1)
+    rotate(b1, -4)
+    rotate(b1, -1)
+    rotate(b1, 1)
 
     print("Now flipping!\n")
 
-    b.flipVertical()
-    print(b)
+    b1.flipVertical()
+    print(b1)
     print()
 
-    b.flipVertical()
-    print(b)
+    b1.flipVertical()
+    print(b1)
     print()
 
     for i in range(4):
-        flip(b, i)
-        flip(b, i)
+        flip(b1, i)
+        flip(b1, i)
+
+    print("Testing equality!")
+    for i in range(4):
+        b2.rotateOne()
+        b3.rotateOne()
+        # test equality
+        assert b1 == b2
+        assert b2 == b1
+        # test inequality
+        assert b2 != b3
+        assert b3 != b2
+        assert b1 != b3
+        assert b3 != b1
+    for i in range(4):
+        b2.flip(i)
+        b3.flip(i)
+        # test equality
+        assert b1 == b2
+        assert b2 == b1
+        # test inequality
+        assert b2 != b3
+        assert b3 != b2
+        assert b1 != b3
+        assert b3 != b1
+        b2.flip(i)
+        b3.flip(i)
 
 
 if __name__ == "__main__":
