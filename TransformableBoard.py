@@ -5,6 +5,8 @@
 #
 from __future__ import annotations
 from Board import Board
+from typing import Tuple
+from copy import copy, deepcopy
 
 class TransformableBoard(Board):
 
@@ -94,6 +96,37 @@ class TransformableBoard(Board):
             if equivalent:
                 return True
 
+    def __copy__(self) -> TransformableBoard:
+        b = TransformableBoard()
+        b._state = deepcopy(self._state)
+        return b
+
+    def movesAreEquivalent(self, symbol: str, move1: Tuple[int, int], move2: Tuple[int, int]) -> bool:
+        """
+        Determines if the two given moves are equivalent up to symmetry
+        :param symbol: the symbol to make the move with
+        :param move1: the first (x, y) move to consider
+        :param move2: the second (x, y) move to consider
+        :return: True if the two moves are equivalent on this board, False otherwise
+        """
+        # make copies of the current board state so we don't change self
+        b1 = copy(self)
+        b2 = copy(self)
+        # add the moves to the copies
+        b1.addMove(symbol, move1)
+        b2.addMove(symbol, move2)
+        # check if the copies are equivalent up to symmetry
+        return b1 == b2
+
+    def exactlyEquals(self, other: TransformableBoard) -> bool:
+        return self._state == other._state
+
+
+    def matchesLabel(self, label: str) -> bool:
+        other = TransformableBoard(label)
+        return self == other
+
+
 def rotate(b: TransformableBoard, n: int):
     b.rotate(n)
     print(b)
@@ -108,6 +141,14 @@ def main():
     b1 = TransformableBoard()
     b2 = TransformableBoard()
     b3 = TransformableBoard()
+    # all empty boards are equivalent
+    assert b1 == b2
+    assert b2 == b1
+    assert b3 == b1
+    assert b1 == b3
+    assert b2 == b3
+    assert b3 == b1
+    print(b1, b2, b3, sep="\n")
     for y in range(3):
         for x in range(3):
             # board should be 1 2 3 / 4 5 6 / 7 8 9

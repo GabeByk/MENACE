@@ -5,6 +5,7 @@
 #
 from __future__ import annotations
 from typing import List, Tuple
+from copy import deepcopy
 
 def isHomogenous(symbols: List) -> bool:
     """
@@ -33,12 +34,19 @@ class Board:
     # the character that signifies a move from the O player
     naught = "O"
 
-    def __init__(self):
+    def __init__(self, label: str = None):
         """
-        Create an empty board
+        Create a board
+        :param label: Optional; if provided in the same format as compactStr outputs, initializes the Board to that
+        state
         """
         # state is a 3x3 array
         self._state = [[Board.empty for i in range(3)] for j in range(3)]
+        if label is not None and len(label) == 9:
+            for i in range(len(label)):
+                row = i // 3
+                column = i % 3
+                self._state[row][column] = label[i]
 
     def isLegal(self, position: Tuple[int, int]) -> bool:
         """
@@ -136,6 +144,25 @@ class Board:
             return True
         # we know there's no winner, but if the board is full, there game is still over
         return self.isFull()
+
+    def compactStr(self) -> str:
+        """
+        :return: all the current moves on the same line (e.g. _XXOX__XO)
+        """
+        final = []
+        for row in self._state:
+            for move in row:
+                final.append(move)
+        return "".join(final)
+
+    def __copy__(self) -> Board:
+        """
+        :return: a deep copy of this Board
+        """
+        # return a copy of this board
+        b = Board()
+        b._state = deepcopy(self._state)
+        return b
 
     def __eq__(self, other: Board) -> bool:
         """

@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="f551a5fb-ad2e-4f94-87a7-2fe0a95523a3" name="Changes" comment="Added the TransformableBoard with rotations and reflections.">
+    <list default="true" id="f551a5fb-ad2e-4f94-87a7-2fe0a95523a3" name="Changes" comment="Implemented == and != for Boards and TransformableBoards; for Boards == is exact equality, and for TransformableBoards, == is equal up to symmetry.">
+      <change afterPath="$PROJECT_DIR$/MENACE.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/generateEmptyMenaces.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/menace.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/menace1.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/menace2.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/textBasedMenaceGame.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/textBasedMenaceVSMenace.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Board.py" beforeDir="false" afterPath="$PROJECT_DIR$/Board.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TransformableBoard.py" beforeDir="false" afterPath="$PROJECT_DIR$/TransformableBoard.py" afterDir="false" />
@@ -25,20 +32,28 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="2FGIEJmsE2UDuRgtolEsUF6deRv" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "last_opened_file_path": "C:/Users/gabej/PycharmProjects/MENACE"
   }
 }]]></component>
-  <component name="RunManager" selected="Python.TransformableBoard">
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\gabej\PycharmProjects\MENACE" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.textBasedMenaceVSMenace">
     <configuration name="TransformableBoard" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="MENACE" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -52,6 +67,27 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/TransformableBoard.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="generateEmptyMenaces" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="MENACE" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/generateEmptyMenaces.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -81,8 +117,53 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="textBasedMenaceGame" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="MENACE" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/textBasedMenaceGame.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="textBasedMenaceVSMenace" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="MENACE" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/textBasedMenaceVSMenace.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.textBasedMenaceVSMenace" />
+        <item itemvalue="Python.generateEmptyMenaces" />
+        <item itemvalue="Python.textBasedMenaceGame" />
         <item itemvalue="Python.TransformableBoard" />
       </list>
     </recent_temporary>
@@ -110,7 +191,14 @@
       <option name="project" value="LOCAL" />
       <updated>1664315767776</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Implemented == and != for Boards and TransformableBoards; for Boards == is exact equality, and for TransformableBoards, == is equal up to symmetry.">
+      <created>1664317146765</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1664317146765</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -125,17 +213,34 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="modified the Board's string method to not add a new line at the end as would be expected with most classes; as a result, adding a new line after printing a board is recommended. also modified the text based game to still look the same" />
     <MESSAGE value="Added the TransformableBoard with rotations and reflections." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added the TransformableBoard with rotations and reflections." />
+    <MESSAGE value="Implemented == and != for Boards and TransformableBoards; for Boards == is exact equality, and for TransformableBoards, == is equal up to symmetry." />
+    <option name="LAST_COMMIT_MESSAGE" value="Implemented == and != for Boards and TransformableBoards; for Boards == is exact equality, and for TransformableBoards, == is equal up to symmetry." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/TransformableBoard.py</url>
-          <line>152</line>
+          <line>193</line>
           <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/textBasedMenaceGame.py</url>
+          <line>47</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/textBasedMenaceVSMenace.py</url>
+          <line>44</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/textBasedMenaceVSMenace.py</url>
+          <line>6</line>
+          <option name="timeStamp" value="12" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
