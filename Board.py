@@ -67,9 +67,16 @@ class Board:
         :param symbol: The symbol to put at the given position; should be one of Board.naught or Board.cross
         :param position: the (x, y) position of the space to fill, with top left (0, 0) and bottom right (2, 2)
         """
-        x, y = position
-        # position x, y is row y column x
-        self._state[y][x] = symbol
+        from MENACE import Matchbox
+        if position == Matchbox.forfeit:
+            for x in range(3):
+                for y in range(3):
+                    self._state[y][x] = "-" * len(Matchbox.forfeit)
+            self._state[1][1] = Matchbox.forfeit
+        else:
+            x, y = position
+            # position x, y is row y column x
+            self._state[y][x] = symbol
 
     def _getRows(self) -> List[List[str]]:
         """

@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="f551a5fb-ad2e-4f94-87a7-2fe0a95523a3" name="Changes" comment="Implemented == and != for Boards and TransformableBoards; for Boards == is exact equality, and for TransformableBoards, == is equal up to symmetry.">
-      <change afterPath="$PROJECT_DIR$/MENACE.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generateEmptyMenaces.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/menace.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/menace1.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/menace2.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/textBasedMenaceGame.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/textBasedMenaceVSMenace.py" afterDir="false" />
+    <list default="true" id="f551a5fb-ad2e-4f94-87a7-2fe0a95523a3" name="Changes" comment="First semi-functioning prototype. &#10;Current identified bugs:&#10;) A MENACE that has learned to forfeit cannot be read from a file; line 220 assumes there are elements in the dictionary&#10;) MENACE can cheat; this is probably the transformation from Matchbox label space to Board state not working properly.&#10;TODO: make TransformableMoves?">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Board.py" beforeDir="false" afterPath="$PROJECT_DIR$/Board.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MENACE.py" beforeDir="false" afterPath="$PROJECT_DIR$/MENACE.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TransformableBoard.py" beforeDir="false" afterPath="$PROJECT_DIR$/TransformableBoard.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/menace1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/menace1.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/menace2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/menace2.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/textBasedMenaceGame.py" beforeDir="false" afterPath="$PROJECT_DIR$/textBasedMenaceGame.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/textBasedMenaceVSMenace.py" beforeDir="false" afterPath="$PROJECT_DIR$/textBasedMenaceVSMenace.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -162,8 +160,8 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.textBasedMenaceVSMenace" />
-        <item itemvalue="Python.generateEmptyMenaces" />
         <item itemvalue="Python.textBasedMenaceGame" />
+        <item itemvalue="Python.generateEmptyMenaces" />
         <item itemvalue="Python.TransformableBoard" />
       </list>
     </recent_temporary>
@@ -198,7 +196,14 @@
       <option name="project" value="LOCAL" />
       <updated>1664317146765</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="First semi-functioning prototype. &#10;Current identified bugs:&#10;) A MENACE that has learned to forfeit cannot be read from a file; line 220 assumes there are elements in the dictionary&#10;) MENACE can cheat; this is probably the transformation from Matchbox label space to Board state not working properly.&#10;TODO: make TransformableMoves?">
+      <created>1664330732710</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1664330732710</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -217,29 +222,25 @@
     <MESSAGE value="modified the Board's string method to not add a new line at the end as would be expected with most classes; as a result, adding a new line after printing a board is recommended. also modified the text based game to still look the same" />
     <MESSAGE value="Added the TransformableBoard with rotations and reflections." />
     <MESSAGE value="Implemented == and != for Boards and TransformableBoards; for Boards == is exact equality, and for TransformableBoards, == is equal up to symmetry." />
-    <option name="LAST_COMMIT_MESSAGE" value="Implemented == and != for Boards and TransformableBoards; for Boards == is exact equality, and for TransformableBoards, == is equal up to symmetry." />
+    <MESSAGE value="First semi-functioning prototype. &#10;Current identified bugs:&#10;) A MENACE that has learned to forfeit cannot be read from a file; line 220 assumes there are elements in the dictionary&#10;) MENACE can cheat; this is probably the transformation from Matchbox label space to Board state not working properly.&#10;TODO: make TransformableMoves?" />
+    <option name="LAST_COMMIT_MESSAGE" value="First semi-functioning prototype. &#10;Current identified bugs:&#10;) A MENACE that has learned to forfeit cannot be read from a file; line 220 assumes there are elements in the dictionary&#10;) MENACE can cheat; this is probably the transformation from Matchbox label space to Board state not working properly.&#10;TODO: make TransformableMoves?" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/TransformableBoard.py</url>
-          <line>193</line>
+          <line>203</line>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/textBasedMenaceGame.py</url>
-          <line>47</line>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/textBasedMenaceVSMenace.py</url>
-          <line>44</line>
+          <line>35</line>
           <option name="timeStamp" value="8" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/textBasedMenaceVSMenace.py</url>
-          <line>6</line>
+          <line>7</line>
           <option name="timeStamp" value="12" />
         </line-breakpoint>
       </breakpoints>

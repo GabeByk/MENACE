@@ -121,10 +121,20 @@ class TransformableBoard(Board):
     def exactlyEquals(self, other: TransformableBoard) -> bool:
         return self._state == other._state
 
-
     def matchesLabel(self, label: str) -> bool:
         other = TransformableBoard(label)
         return self == other
+
+    def matchLabel(self, label: str) -> None:
+        """
+        Transforms the board to match the given label, if possible
+        :param label: the compactStr of a Board
+        """
+        # create a board from the given board
+        b = TransformableBoard(label)
+        # if they're equivalent under symmetry, just take the new state
+        if self == b:
+            self._state = b._state
 
 
 def rotate(b: TransformableBoard, n: int):

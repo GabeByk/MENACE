@@ -1,8 +1,15 @@
 from MENACE import MENACE
 from TransformableBoard import TransformableBoard, Board
 
+TRAIN = False
+PlayerFirst = False
 def main():
-    m = MENACE(Board.cross, "menace.txt")
+    if PlayerFirst:
+        n = 0
+    else:
+        n = 1
+    menace = f"menace{2 - n}.txt"
+    m = MENACE(Board.cross, menace)
     b = TransformableBoard()
     print(b)
     print()
@@ -16,7 +23,7 @@ def main():
             "Sorry, either that spot is taken or that spot's not on the board. Please re-enter your move."
         ]
         # if it's the human's turn, get the human's move
-        if moves % 2 == 0:
+        if moves % 2 == n:
             print(prompts[0])
             # keep trying to get a move until we get one that's legal
             while True:
@@ -35,6 +42,7 @@ def main():
                         move = (int(move[0]), int(move[1]))
                         # check to see if the move is legal while we have it
                         if b.isLegal(move):
+                            b.addMove(players[n], move)
                             break
                         else:
                             print(prompts[3])
@@ -43,9 +51,8 @@ def main():
                         print(prompts[2])
         # otherwise, get MENACE's move
         else:
-            move = m.getMove(b)
+            m.makeMove(b)
         # add the move, print the board
-        b.addMove(players[moves % 2], move)
         moves += 1
         print(b)
         print()
@@ -55,8 +62,9 @@ def main():
         print(f"Player {winner} won in {moves} moves!")
     else:
         print(f"Tie after {moves} moves!")
-    m.gameOver(winner)
-    m.save("menace.txt")
+    if TRAIN:
+        m.gameOver(winner)
+        m.save(menace)
 
 
 if __name__ == "__main__":
