@@ -1,15 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="f551a5fb-ad2e-4f94-87a7-2fe0a95523a3" name="Changes" comment="First semi-functioning prototype. &#10;Current identified bugs:&#10;) A MENACE that has learned to forfeit cannot be read from a file; line 220 assumes there are elements in the dictionary&#10;) MENACE can cheat; this is probably the transformation from Matchbox label space to Board state not working properly.&#10;TODO: make TransformableMoves?">
+    <list default="true" id="f551a5fb-ad2e-4f94-87a7-2fe0a95523a3" name="Changes" comment="Phase 2 Complete: MENACE works in text and learns properly. &#10;Changes:&#10;    ) MENACE resets its learning with a given box if it runs out of beads, making forfeiting unnecessary&#10;    ) MENACE now makes the move on the board on its own instead of telling the user what move to make; cheating is no longer possible">
+      <change afterPath="$PROJECT_DIR$/Prototype/Board.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Prototype/MENACE.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Prototype/TransformableBoard.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Prototype/generateEmptyMenaces.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Prototype/menace.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Prototype/menace1.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Prototype/menace2.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Prototype/textBasedGame.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Prototype/textBasedMenaceGame.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Prototype/textBasedMenaceVSMenace.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Version 1/Board.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Version 1/Game.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Version 1/Human.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Version 1/MENACE.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Version 1/Matchbox.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Version 1/Move.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Version 1/Player.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Version 1/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Board.py" beforeDir="false" afterPath="$PROJECT_DIR$/Board.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MENACE.py" beforeDir="false" afterPath="$PROJECT_DIR$/MENACE.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TransformableBoard.py" beforeDir="false" afterPath="$PROJECT_DIR$/TransformableBoard.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/menace1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/menace1.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/menace2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/menace2.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/textBasedMenaceGame.py" beforeDir="false" afterPath="$PROJECT_DIR$/textBasedMenaceGame.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/textBasedMenaceVSMenace.py" beforeDir="false" afterPath="$PROJECT_DIR$/textBasedMenaceVSMenace.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Board.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MENACE.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TransformableBoard.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generateEmptyMenaces.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/menace.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/menace1.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/menace2.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textBasedGame.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textBasedMenaceGame.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textBasedMenaceVSMenace.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,7 +72,28 @@
       <recent name="C:\Users\gabej\PycharmProjects\MENACE" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.textBasedMenaceVSMenace">
+  <component name="RunManager" selected="Python.Board">
+    <configuration name="Board" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="MENACE" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Version 1" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Version 1/Board.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="TransformableBoard" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="MENACE" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -159,6 +201,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.Board" />
         <item itemvalue="Python.textBasedMenaceVSMenace" />
         <item itemvalue="Python.textBasedMenaceGame" />
         <item itemvalue="Python.generateEmptyMenaces" />
@@ -203,7 +246,14 @@
       <option name="project" value="LOCAL" />
       <updated>1664330732710</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Phase 2 Complete: MENACE works in text and learns properly. &#10;Changes:&#10;    ) MENACE resets its learning with a given box if it runs out of beads, making forfeiting unnecessary&#10;    ) MENACE now makes the move on the board on its own instead of telling the user what move to make; cheating is no longer possible">
+      <created>1664411154145</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1664411154145</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -223,27 +273,7 @@
     <MESSAGE value="Added the TransformableBoard with rotations and reflections." />
     <MESSAGE value="Implemented == and != for Boards and TransformableBoards; for Boards == is exact equality, and for TransformableBoards, == is equal up to symmetry." />
     <MESSAGE value="First semi-functioning prototype. &#10;Current identified bugs:&#10;) A MENACE that has learned to forfeit cannot be read from a file; line 220 assumes there are elements in the dictionary&#10;) MENACE can cheat; this is probably the transformation from Matchbox label space to Board state not working properly.&#10;TODO: make TransformableMoves?" />
-    <option name="LAST_COMMIT_MESSAGE" value="First semi-functioning prototype. &#10;Current identified bugs:&#10;) A MENACE that has learned to forfeit cannot be read from a file; line 220 assumes there are elements in the dictionary&#10;) MENACE can cheat; this is probably the transformation from Matchbox label space to Board state not working properly.&#10;TODO: make TransformableMoves?" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/TransformableBoard.py</url>
-          <line>203</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/textBasedMenaceVSMenace.py</url>
-          <line>35</line>
-          <option name="timeStamp" value="8" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/textBasedMenaceVSMenace.py</url>
-          <line>7</line>
-          <option name="timeStamp" value="12" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="Phase 2 Complete: MENACE works in text and learns properly. &#10;Changes:&#10;    ) MENACE resets its learning with a given box if it runs out of beads, making forfeiting unnecessary&#10;    ) MENACE now makes the move on the board on its own instead of telling the user what move to make; cheating is no longer possible" />
+    <option name="LAST_COMMIT_MESSAGE" value="Phase 2 Complete: MENACE works in text and learns properly. &#10;Changes:&#10;    ) MENACE resets its learning with a given box if it runs out of beads, making forfeiting unnecessary&#10;    ) MENACE now makes the move on the board on its own instead of telling the user what move to make; cheating is no longer possible" />
   </component>
 </project>

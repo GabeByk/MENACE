@@ -4,7 +4,6 @@ from TransformableBoard import TransformableBoard, Board
 TRAIN = True
 def main():
     # for now, if MENACE learns to forfeit, make a new one
-    # TODO: Allow for forfeits
     m1 = MENACE(Board.naught, "menace1.txt")
     m2 = MENACE(Board.cross, "menace2.txt")
     b = TransformableBoard()
