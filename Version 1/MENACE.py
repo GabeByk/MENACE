@@ -7,6 +7,7 @@
 from Player import Player
 from Board import Board
 from Matchbox import Matchbox
+from Transformation import Transformation
 
 class MENACE(Player):
     pass

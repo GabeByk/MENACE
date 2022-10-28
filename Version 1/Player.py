@@ -21,7 +21,8 @@ def raiseMethodUndefinedError(caller: str, method: str):
 
 class Player:
     """
-    Base class for every class that interacts with the Game. Any subclass must override everything above __init__.
+    An interface for interacting with a Tic-Tac-Toe game. To use, create a class that inherits from this, and implement
+    makeMove. You may override any of the other methods to your liking, but you must override makeMove.
     """
     # The symbol this Player will play: one of Board.X or Board.O
     _symbol: str
@@ -29,25 +30,48 @@ class Player:
     _name: str
 
     def makeMove(self, board: Board) -> None:
+        """
+        Determines the Move this Player wants to make, then makes it on the given Board.
+        :raises MethodUndefinedError: if not overridden by a subclass
+        :param board: the Board to make a move on
+        """
         raiseMethodUndefinedError(str(self), "makeMove")
 
-    def clone(self) -> Player:
-        raiseMethodUndefinedError(str(self), "clone")
-        # PyCharm doesn't know that this code is unreachable, so it complained that clone doesn't return a Player
-        return self.clone()
-
-    def __init__(self, name: str, symbol: str = None):
+    def __init__(self, name: str = "", symbol: str = None):
+        """
+        :param name: The name to give this Player. Defaults to "" if not provided.
+        :param symbol: The symbol this Player will play with, usually one of Move.NOUGHT or Move.CROSS. If not provided,
+        one can be set later using setSymbol.
+        """
         self._name = name
         self._symbol = symbol
 
-    def _setSymbol(self, symbol: str):
+    def setSymbol(self, symbol: str):
+        """
+        Mutates this Player so it will use the given symbol.
+        :param symbol:
+        """
         self._symbol = symbol
 
     def symbol(self) -> str:
+        """
+        :return: The symbol this player uses
+        """
         return self._symbol
 
     def name(self) -> str:
+        """
+        :return: This Player's name
+        """
         return self._name
 
     def __repr__(self) -> str:
-        return f"{self.name()}: {self.symbol()}"
+        """
+        If this player has a name, then this method returns the name, followed by a : and a space, then the symbol
+        this player plays as. Otherwise, just returns the symbol this player plays as.
+        :return: The string representation of this Player, as described above.
+        """
+        if len(self.name()) > 0:
+            return f"{self.name()}: {self.symbol()}"
+        else:
+            return self.symbol()

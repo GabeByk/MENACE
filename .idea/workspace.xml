@@ -1,36 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="f551a5fb-ad2e-4f94-87a7-2fe0a95523a3" name="Changes" comment="Phase 2 Complete: MENACE works in text and learns properly. &#10;Changes:&#10;    ) MENACE resets its learning with a given box if it runs out of beads, making forfeiting unnecessary&#10;    ) MENACE now makes the move on the board on its own instead of telling the user what move to make; cheating is no longer possible">
-      <change afterPath="$PROJECT_DIR$/Prototype/Board.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Prototype/MENACE.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Prototype/TransformableBoard.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Prototype/generateEmptyMenaces.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Prototype/menace.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Prototype/menace1.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Prototype/menace2.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Prototype/textBasedGame.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Prototype/textBasedMenaceGame.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Prototype/textBasedMenaceVSMenace.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Version 1/Board.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Version 1/Game.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Version 1/Human.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Version 1/MENACE.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Version 1/Matchbox.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Version 1/Move.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Version 1/Player.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Version 1/main.py" afterDir="false" />
+    <list default="true" id="f551a5fb-ad2e-4f94-87a7-2fe0a95523a3" name="Changes" comment="Began work on Version 1.">
+      <change afterPath="$PROJECT_DIR$/Version 1/Matrix.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Version 1/Transformation.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Version 1/graphics.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Board.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MENACE.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TransformableBoard.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/generateEmptyMenaces.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/menace.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/menace1.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/menace2.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/textBasedGame.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/textBasedMenaceGame.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/textBasedMenaceVSMenace.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Version 1/Board.py" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/Board.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Version 1/Game.py" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/Game.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Version 1/Human.py" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/Human.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Version 1/MENACE.py" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/MENACE.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Version 1/Matchbox.py" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/Matchbox.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Version 1/Move.py" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/Move.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Version 1/Player.py" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/Player.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Version 1/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,15 +47,16 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "last_opened_file_path": "C:/Users/gabej/PycharmProjects/MENACE"
+    "last_opened_file_path": "C:/Users/gabej/PycharmProjects/MENACE/Version 1"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\gabej\PycharmProjects\MENACE\Version 1" />
       <recent name="C:\Users\gabej\PycharmProjects\MENACE" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.Board">
+  <component name="RunManager" selected="Python.Transformation">
     <configuration name="Board" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="MENACE" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -94,7 +78,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="TransformableBoard" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="Matrix" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="MENACE" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -102,11 +86,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Version 1" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/TransformableBoard.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Version 1/Matrix.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -115,7 +99,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="generateEmptyMenaces" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="Transformation" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="MENACE" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -123,11 +107,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Version 1" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/generateEmptyMenaces.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Version 1/Transformation.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -201,11 +185,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.Transformation" />
+        <item itemvalue="Python.Matrix" />
         <item itemvalue="Python.Board" />
         <item itemvalue="Python.textBasedMenaceVSMenace" />
         <item itemvalue="Python.textBasedMenaceGame" />
-        <item itemvalue="Python.generateEmptyMenaces" />
-        <item itemvalue="Python.TransformableBoard" />
       </list>
     </recent_temporary>
   </component>
@@ -253,7 +237,14 @@
       <option name="project" value="LOCAL" />
       <updated>1664411154145</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Began work on Version 1.">
+      <created>1665677185173</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1665677185173</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -274,6 +265,23 @@
     <MESSAGE value="Implemented == and != for Boards and TransformableBoards; for Boards == is exact equality, and for TransformableBoards, == is equal up to symmetry." />
     <MESSAGE value="First semi-functioning prototype. &#10;Current identified bugs:&#10;) A MENACE that has learned to forfeit cannot be read from a file; line 220 assumes there are elements in the dictionary&#10;) MENACE can cheat; this is probably the transformation from Matchbox label space to Board state not working properly.&#10;TODO: make TransformableMoves?" />
     <MESSAGE value="Phase 2 Complete: MENACE works in text and learns properly. &#10;Changes:&#10;    ) MENACE resets its learning with a given box if it runs out of beads, making forfeiting unnecessary&#10;    ) MENACE now makes the move on the board on its own instead of telling the user what move to make; cheating is no longer possible" />
-    <option name="LAST_COMMIT_MESSAGE" value="Phase 2 Complete: MENACE works in text and learns properly. &#10;Changes:&#10;    ) MENACE resets its learning with a given box if it runs out of beads, making forfeiting unnecessary&#10;    ) MENACE now makes the move on the board on its own instead of telling the user what move to make; cheating is no longer possible" />
+    <MESSAGE value="Began work on Version 1." />
+    <option name="LAST_COMMIT_MESSAGE" value="Began work on Version 1." />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Version 1/Matrix.py</url>
+          <line>169</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Version 1/Transformation.py</url>
+          <line>201</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

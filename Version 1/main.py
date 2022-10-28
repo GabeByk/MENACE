@@ -5,9 +5,14 @@
 #
 
 from Game import Game
+from MENACE import MENACE
+from Human import Human
 
 def main():
-    pass
+    m = MENACE("MENACE")
+    h = Human("Human")
+    g = Game(m, h)
+    g.run()
 
 
 if __name__ == "__main__":

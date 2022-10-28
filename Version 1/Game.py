@@ -6,6 +6,7 @@
 
 from Board import Board
 from Player import Player
+from Move import Move
 from typing import List
 
 class Game:
@@ -21,7 +22,9 @@ class Game:
         :param player2: The player that will go second; this player will be given O
         """
         self._board = Board()
-        self._players = [player1.clone(), player2.clone()]
+        player1.setSymbol(Move.CROSS)
+        player2.setSymbol(Move.NOUGHT)
+        self._players = []
 
     def playGame(self):
         """
@@ -36,3 +39,8 @@ class Game:
         while True:
             # TODO: let the human involved choose to play another game or to quit
             self.playGame()
+
+class GameUI(Game):
+    """
+    An extension of the Game class that uses a GUI instead of the Python Console to run the game.
+    """
