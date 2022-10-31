@@ -1,1 +1,1 @@
-Testing whether commits work now that I've switched ownership to my non-personal account
+Testing whether commits work now that I've changed the user I'm logged in as in Git
