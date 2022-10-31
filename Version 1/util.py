@@ -1,13 +1,25 @@
 #
 # Gabe Byk
 # CS481: Seminar
-# 27 October 2022
+# 31 October 2022
 #
 
 from __future__ import annotations
 # heavily referenced https://docs.python.org/3/library/typing.html and various sub-links to better understand
 # type annotations for lists, tuples, and sequences
 from typing import List, Sequence
+from math import pi
+
+def toRadians(degrees: float) -> float:
+    """
+    Converts the given angle from degrees to radians
+    :param degrees: The angle measure, in degrees
+    :return: The angle measure, in radians
+    """
+    return pi * degrees / 180
+
+class MethodUndefinedError(Exception):
+    pass
 
 class InvalidDimensionsError(Exception):
     pass
@@ -163,7 +175,7 @@ class Matrix:
         """
         return str(self._matrix)
 
-def main():
+def testMatrices():
     v1 = ((1, 2, 3), (4, 5, 6))
     v2 = ((1, 2), (3, 4), (5, 6))
     m1 = Matrix(2, 3)
@@ -183,5 +195,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    testMatrices()
 

@@ -6,9 +6,7 @@
 
 from __future__ import annotations
 from Board import Board
-
-class MethodUndefinedError(Exception):
-    pass
+from util import MethodUndefinedError
 
 def raiseMethodUndefinedError(caller: str, method: str):
     """

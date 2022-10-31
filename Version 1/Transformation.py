@@ -6,18 +6,10 @@
 
 from __future__ import annotations
 from typing import Tuple, Sequence
-from math import sin, cos, pi
-from Matrix import Matrix
+from math import sin, cos
+from util import Matrix, toRadians
 # used only for testing purposes
 from graphics import GraphWin, Point, Circle, color_rgb, Text
-
-def toRadians(degrees: float) -> float:
-    """
-    Converts the given angle from degrees to radians
-    :param degrees: The angle measure, in degrees
-    :return: The angle measure, in radians
-    """
-    return pi * degrees / 180
 
 class Transformation:
     """
