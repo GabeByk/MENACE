@@ -1,20 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="f551a5fb-ad2e-4f94-87a7-2fe0a95523a3" name="Changes" comment="Extracted Matrix class, toRadians function, and MethodUndefinedError to util.py so they're in one central place instead of scattered across the module wherever they were first needed.">
-      <change beforePath="$PROJECT_DIR$/.idea/MENACE.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/MENACE.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="f551a5fb-ad2e-4f94-87a7-2fe0a95523a3" name="Changes" comment="Fixed formatting in all files; added the ability to get the inverse transformation for any Transformation and added transformation functionality to Boards. Next step is MENACE.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Version 1/Board.py" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/Board.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Version 1/Game.py" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/Game.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Version 1/Human.py" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/Human.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Version 1/MENACE.py" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/MENACE.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Version 1/Matchbox.py" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/Matchbox.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Version 1/Move.py" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/Move.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Version 1/Player.py" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/Player.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Version 1/Transformation.py" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/Transformation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Version 1/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Version 1/util.py" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/util.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -263,7 +251,14 @@
       <option name="project" value="LOCAL" />
       <updated>1667255278420</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Fixed formatting in all files; added the ability to get the inverse transformation for any Transformation and added transformation functionality to Boards. Next step is MENACE.">
+      <created>1669403510785</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1669403510785</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -287,7 +282,8 @@
     <MESSAGE value="Began work on Version 1." />
     <MESSAGE value="Re-designed Version 1, including an implementation of matrices (Matrix.py) and transformations (Transformation.py). Also included graphics.py to test Transformation.py, but it will probably be needed later" />
     <MESSAGE value="Extracted Matrix class, toRadians function, and MethodUndefinedError to util.py so they're in one central place instead of scattered across the module wherever they were first needed." />
-    <option name="LAST_COMMIT_MESSAGE" value="Extracted Matrix class, toRadians function, and MethodUndefinedError to util.py so they're in one central place instead of scattered across the module wherever they were first needed." />
+    <MESSAGE value="Fixed formatting in all files; added the ability to get the inverse transformation for any Transformation and added transformation functionality to Boards. Next step is MENACE." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed formatting in all files; added the ability to get the inverse transformation for any Transformation and added transformation functionality to Boards. Next step is MENACE." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
