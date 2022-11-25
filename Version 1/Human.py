@@ -3,6 +3,7 @@ from Player import Player
 from Board import Board
 from Move import Move
 
+
 class Human(Player):
     """
     A usable Player that interacts with a Human via the Python Console.
@@ -26,6 +27,7 @@ class Human(Player):
             self._reportIllegalMove()
             move = self._askForMove()
         board.makeMove(move)
+
 
 class HumanUI(Human):
     """

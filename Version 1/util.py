@@ -10,6 +10,7 @@ from __future__ import annotations
 from typing import List, Sequence
 from math import pi
 
+
 def toRadians(degrees: float) -> float:
     """
     Converts the given angle from degrees to radians
@@ -18,11 +19,28 @@ def toRadians(degrees: float) -> float:
     """
     return pi * degrees / 180
 
+
 class MethodUndefinedError(Exception):
     pass
 
+
+def raiseMethodUndefinedError(caller: str, method: str):
+    """
+    Raises a MethodUndefinedError with the following message:
+    `Object {caller} tried to call {method}, but {method} is not defined!`
+    :param caller: The object that called the undefined method
+    :param method: The undefined method that was called
+    """
+    raise MethodUndefinedError(f"Object {caller} tried to call {method}, but {method} is not defined!")
+
+
 class InvalidDimensionsError(Exception):
     pass
+
+
+class IllegalMoveError(Exception):
+    pass
+
 
 class Matrix:
     """
@@ -168,12 +186,72 @@ class Matrix:
                         result[row][column] = total
                 return result
 
+    def __eq__(self, other: Matrix) -> bool:
+        """
+        :param other: The Matrix to compare to
+        :return: True if the matrices are equal (up to floating point error), False otherwise
+        """
+        threshold = 10 ** -3
+        if len(self) != len(other) or len(self[0]) != len(other[0]):
+            return False
+        else:
+            equivalent = True
+            for i in range(len(self)):
+                for j in range(len(self[0])):
+                    equivalent = equivalent and abs(self[i][j] - other[i][j]) < threshold
+                    if not equivalent:
+                        return False
+        return True
+
     def __repr__(self) -> str:
         """
         :return: The string representation of a list of the rows of the matrix, with each row in brackets and separated
         by commas.
         """
         return str(self._matrix)
+
+    def determinant(self) -> float | None:
+        """
+        Calculates and returns the determinant of this matrix
+        NOTE: Currently only works for 2x2 and 3x3 matrices
+        :return: The determinant of the matrix, or None if the determinant does not exist
+        :raises InvalidDimensionsError: if the matrix is not 2x2 or 3x3
+        """
+        if len(self) == len(self[0]):
+            if len(self) == 2:
+                return self[0][0] * self[1][1] - self[1][0] * self[0][1]
+            elif len(self) == 3:
+                # referenced https://www.youtube.com/watch?v=v4MenooI1J0 (Khan Academy) for the shortcut method
+                mainDiagonals = self[0][0] * self[1][1] * self[2][2] + \
+                                self[0][1] * self[1][2] * self[2][0] + \
+                                self[0][2] * self[1][0] * self[2][1]
+                alternateDiagonals = self[0][0] * self[1][2] * self[2][1] + \
+                                     self[0][1] * self[1][0] * self[2][2] + \
+                                     self[0][2] * self[1][1] * self[2][0]
+                return mainDiagonals - alternateDiagonals
+            else:
+                raise InvalidDimensionsError(f"Currently only the determinant of 2x2 and 3x3 matrices are supported")
+        else:
+            return None
+
+    def transposed(self) -> Matrix:
+        """
+        Computes and returns the transpose of this matrix, i.e. the matrix with its rows and columns swapped compared
+        to this one
+        :return: The Transpose of this matrix
+        """
+        transpose = Matrix(len(self), len(self[0]))
+        for i in range(len(self)):
+            for j in range(len(self[0])):
+                transpose[i][j] = self[j][i]
+        return transpose
+
+    def transpose(self) -> None:
+        """
+        Switches this matrix's rows and columns
+        """
+        self._matrix = self.transposed()._matrix
+
 
 def testMatrices():
     v1 = ((1, 2, 3), (4, 5, 6))
@@ -196,4 +274,3 @@ def testMatrices():
 
 if __name__ == "__main__":
     testMatrices()
-

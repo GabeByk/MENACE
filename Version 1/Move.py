@@ -6,6 +6,7 @@
 
 from typing import Tuple
 
+
 class Move:
     # class variables that determine the character to be used for O, X, and nothing
     NOUGHT = "O"

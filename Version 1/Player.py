@@ -6,16 +6,8 @@
 
 from __future__ import annotations
 from Board import Board
-from util import MethodUndefinedError
+from util import raiseMethodUndefinedError
 
-def raiseMethodUndefinedError(caller: str, method: str):
-    """
-    Raises a MethodUndefinedError with the following message:
-    `Object {caller} tried to call {method}, but {method} is not defined!`
-    :param caller: The object that called the undefined method
-    :param method: The method that was undefined
-    """
-    raise MethodUndefinedError(f"Object {caller} tried to call {method}, but {method} is not defined!")
 
 class Player:
     """

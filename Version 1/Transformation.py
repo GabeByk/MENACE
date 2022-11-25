@@ -11,6 +11,7 @@ from util import Matrix, toRadians
 # used only for testing purposes
 from graphics import GraphWin, Point, Circle, color_rgb, Text
 
+
 class Transformation:
     """
     An interface used to contain all necessary information to tell an object how it should be transformed
@@ -61,13 +62,63 @@ class Transformation:
         :param other: The Transformation to apply before applying this one
         :return: The combined Transformation that results in both actions being applied
         """
-        return Transformation(self._matrix * other._matrix)
+        result = Transformation(self._matrix * other._matrix)
+        # net translations are done correctly by the multiplication
+        return result
 
     def __repr__(self) -> str:
         """
         :return: the string representation of this Transformation's matrix
         """
         return str(self.transformationMatrix())
+
+    # referenced https://youtu.be/xZBbfLLfVV4 for the general algorithm
+    def getInverse(self) -> Transformation:
+        """
+        Calculates and provides the transformation that undoes this one
+        :return: A new Transformation that completely undoes this one
+        """
+        # construct the matrix of minors
+        invertedMatrix = Matrix(3, 3)
+        for rowNumber in range(3):
+            for columnNumber in range(3):
+                minor = Matrix(2, 2)
+                minorValues = [[0 for i in range(2)] for i in range(2)]
+                # minor should be the original matrix except the values in the same row or column
+                for minorRowNumber in range(3):
+                    # determine whether we've passed the row
+                    rowOffset = 1
+                    if minorRowNumber < rowNumber:
+                        rowOffset = 0
+                    elif minorRowNumber > rowNumber:
+                        rowOffset = -1
+                    # rowOffset is 1 when this row should be removed, so we can skip the inner iteration
+                    if rowOffset != 1:
+                        for minorColumnNumber in range(3):
+                            # determine whether we've passed the column
+                            columnOffset = 1
+                            if minorColumnNumber < columnNumber:
+                                columnOffset = 0
+                            elif minorColumnNumber > columnNumber:
+                                columnOffset = -1
+                            # if we should keep the row and column, add it where it should go
+                            if columnOffset != 1:
+                                minorValues[minorRowNumber + rowOffset][minorColumnNumber + columnOffset] = \
+                                    self._matrix[minorRowNumber][minorColumnNumber]
+                minor.setValues(minorValues)
+                invertedMatrix[rowNumber][columnNumber] = (-1) ** (rowNumber + columnNumber) * minor.determinant()
+        # once we have the cofactor matrix, we just have to divide by the determinant and we're good to go
+        invertedMatrix *= 1 / self._matrix.determinant()
+        inverse = Transformation(invertedMatrix.transposed())
+        return inverse
+
+    def __eq__(self, other: Transformation) -> bool:
+        """
+        :param other: the Transformation to compare against
+        :return: True if the transformations are the same up to floating point error, False otherwise
+        """
+        return self._matrix == other._matrix
+
 
 class Translation(Transformation):
 
@@ -81,6 +132,7 @@ class Translation(Transformation):
         self._matrix[0][2] = dx
         self._matrix[1][2] = dy
 
+
 class Rotation(Transformation):
 
     def __init__(self, center: Tuple[float, float], degrees: float):
@@ -91,15 +143,19 @@ class Rotation(Transformation):
         """
         super().__init__()
         # compute the sin and cos of the given angle so we don't have to do it later
-        s = sin(-toRadians(degrees))
-        c = cos(-toRadians(degrees))
+        s = sin(toRadians(degrees))
+        c = cos(toRadians(degrees))
 
         # set up the matrix for rotating about (0, 0)
         pureRotation = Matrix(3, 3)
         pureRotation.setToIdentity()
+        # rotation matrix to rotate clockwise by theta should look like this:
+        # cos(theta) | sin(theta) | 0
+        # -sin(theta)| cos(theta) | 0
+        #      0     |      0     | 1
         pureRotation[0][0] = c
-        pureRotation[0][1] = -s
-        pureRotation[1][0] = s
+        pureRotation[0][1] = s
+        pureRotation[1][0] = -s
         pureRotation[1][1] = c
 
         # assign the proper transformation
@@ -118,6 +174,7 @@ class Rotation(Transformation):
             # if the center is (0, 0), we can just rotate about it without translating
             self._matrix = pureRotation
 
+
 class Scale(Transformation):
 
     def __init__(self, xScale: float, yScale: float):
@@ -130,8 +187,8 @@ class Scale(Transformation):
         self._matrix[0][0] = xScale
         self._matrix[1][1] = yScale
 
-class Reflection(Transformation):
 
+class Reflection(Transformation):
     def __init__(self, degrees: float):
         """
         Reflects the plane about a line rotated the given number of degrees clockwise, starting from the y-axis.
@@ -144,9 +201,12 @@ class Reflection(Transformation):
         flipAboutAxis = Scale(-1, 1)
         # +degrees rotates back to where it was
         rotateToStart = Rotation((0, 0), degrees)
-        self._matrix = (rotateToStart * flipAboutAxis * rotateToAxis).transformationMatrix()
+        total = rotateToStart * flipAboutAxis * rotateToAxis
+        self._matrix = total.transformationMatrix()
+
 
 # code from here on out is to test the transformations
+
 
 def drawPoints(points: Sequence[tuple[float | int, float | int]], transformation: Transformation, win: GraphWin)\
         -> list[Circle]:
@@ -178,6 +238,7 @@ def drawPoints(points: Sequence[tuple[float | int, float | int]], transformation
 
     return drawnPoints
 
+
 def main():
     win = GraphWin("Transformation Testing", 600, 600)
     win.setCoords(-5, -5, 5, 5)
@@ -192,10 +253,10 @@ def main():
     toUndraw = drawPoints(points, Transformation(), win)
 
     # transformations and text that describes what they should do
-    transformations = (Translation(0, 0), Rotation((0, 0), 0), Scale(1, 1),
-                       Translation(1, 0), Rotation((0, 0), 90), Scale(2, 1), Reflection(0),
-                       Translation(0, 1), Rotation((1, 1), -90), Scale(1, -2), Reflection(45),
-                       Rotation((0, 0), 180), Reflection(90), Reflection(135))
+    transformations: Sequence[Transformation] = (Translation(0, 0), Rotation((0, 0), 0), Scale(1, 1),
+                                                 Translation(1, 0), Rotation((0, 0), 90), Scale(2, 1), Reflection(0),
+                                                 Translation(0, 1), Rotation((1, 1), -90), Scale(1, -2), Reflection(45),
+                                                 Rotation((0, 0), 180), Reflection(90), Reflection(135))
     labels = ("translate by 0", "rotate by 0", "scale by 1",
 
               "translate 1 right", "rotate 90 clockwise", "scale 2x wider", "flip about y axis",
@@ -214,10 +275,24 @@ def main():
         for point in toUndraw:
             point.undraw()
         toUndraw = drawPoints(points, transformation, win)
+        win.getMouse()
+        inverse = transformation.getInverse()
+        print(f"inverse of that transformation: {inverse}")
+        assert inverse * transformation == Transformation()
+        for point in toUndraw:
+            point.undraw()
+        toUndraw = drawPoints(points, inverse, win)
 
     win.getMouse()
     win.close()
 
 
 if __name__ == "__main__":
-    main()
+    rotation = Rotation((0, 0), 90)
+    point = (-2, 2)
+    print(point)
+    print(rotation.transformedPoint(point))
+    reflection = Reflection(0)
+    print(point)
+    print(reflection.transformedPoint(point))
+    # main()

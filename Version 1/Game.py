@@ -9,6 +9,7 @@ from Player import Player
 from Move import Move
 from typing import List
 
+
 class Game:
     # the Board this game is played on
     _board: Board
@@ -39,6 +40,7 @@ class Game:
         while True:
             # TODO: let the human involved choose to play another game or to quit
             self.playGame()
+
 
 class GameUI(Game):
     """

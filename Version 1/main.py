@@ -8,6 +8,7 @@ from Game import Game
 from MENACE import MENACE
 from Human import Human
 
+
 def main():
     m = MENACE("MENACE")
     h = Human("Human")
