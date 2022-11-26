@@ -65,7 +65,7 @@ def readLogs():
 def main():
     readLogs()
     # humanVsHuman()
-    menaceVsMenace(200, "Menace A.txt", "Menace B.txt")
+    menaceVsMenace(1, "Menace A.txt", "Menace B.txt")
     # human = Human("Gabe")
     # menace = MENACE.fromFile("Menace 2.txt")
     # humanVsMenace(human, menace)

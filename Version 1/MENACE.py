@@ -43,6 +43,7 @@ class MENACE(Player):
         Makes a move on the given Board
         :param board: the Board to make a move on
         """
+        # TODO: Improve performance to match prototype
         # find or create the matchbox for this board state
         correctMatchbox = None
         for matchbox in self._matchboxes:

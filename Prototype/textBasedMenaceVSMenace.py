@@ -39,6 +39,7 @@ def main():
 
 
 if __name__ == "__main__":
-    reps = 1000
+    reps = 200
     for i in range(reps):
+        print(i)
         main()
