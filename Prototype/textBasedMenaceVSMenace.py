@@ -1,5 +1,6 @@
 from MENACE import MENACE
 from TransformableBoard import TransformableBoard, Board
+from time import time
 
 TRAIN = True
 def main():
@@ -40,6 +41,9 @@ def main():
 
 if __name__ == "__main__":
     reps = 200
+    start = time()
     for i in range(reps):
         print(i)
         main()
+    end = time()
+    print(f"Finished {reps} games in {end - start} seconds!")

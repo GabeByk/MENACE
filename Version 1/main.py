@@ -8,6 +8,7 @@ from Game import Game
 from MENACE import MENACE
 from Human import Human
 from Player import Player
+from time import time
 
 
 def menaceVsMenace(iterations, menace1File: str | None = None, menace2File: str | None = None) -> None:
@@ -65,12 +66,18 @@ def readLogs():
 def main():
     readLogs()
     # humanVsHuman()
-    menaceVsMenace(1, "Menace A.txt", "Menace B.txt")
+    rounds = 200
+
+    start = time()
+    menaceVsMenace(rounds, "Menace A.txt", "Menace B.txt")
+    end = time()
     # human = Human("Gabe")
     # menace = MENACE.fromFile("Menace 2.txt")
     # humanVsMenace(human, menace)
     print()
     readLogs()
+    print()
+    print(f"Finished {rounds} games in {end - start} seconds!")
 
 
 if __name__ == "__main__":

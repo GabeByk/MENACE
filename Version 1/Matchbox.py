@@ -11,7 +11,6 @@ from util import InvalidMoveError
 from copy import copy
 from Move import Move
 
-
 class Matchbox:
     """
     A helper class for MENACE that contains a Board state and the Moves that could be made on that Board.
@@ -90,7 +89,8 @@ class Matchbox:
         weightedMoves = []
         for move in self._moves.keys():
             # add a copy of the move for each of its beads
-            weightedMoves += [move for i in range(self._moves[move])]
+            for i in range(self._moves[move]):
+                weightedMoves.append(move)
 
         # choose a random move
         movePosition = randrange(len(weightedMoves))
@@ -98,8 +98,6 @@ class Matchbox:
 
         # make the move
         # transform the given board so the move is legal
-        # TODO: Figure out this bug; sometimes this returns none but not the second time with the exact same inputs
-        # TODO: show the bug to Dr. Feng or Dr. Reed?
         transformation = board.transformationTo(self._board)
         loops = 0
         while transformation is None:
@@ -116,9 +114,14 @@ class Matchbox:
         board.makeMove(move)
         # undo the transformation so it looks like it did before
         board.applyTransformation(transformation.getInverse())
-
         # report the move we made so we can learn from it later
         return move
+
+    def sum(self) -> int:
+        """
+        :return: The number of symbols on the matchbox
+        """
+        return self._board.sum()
 
     def _generateLegalMoves(self) -> None:
         """
@@ -216,14 +219,51 @@ class Matchbox:
 
     def __eq__(self, other: Matchbox) -> bool:
         """
-        Determines if the two matchboxes are identical
+        Determines if the two matchboxes are for the same turn
         :param other: the Matchbox to compare to this one
-        :return: True if the matchboxes are identical, False otherwise
+        :return: True if the Matchboxes' states have the same number of symbols, False otherwise
         """
-        symbolsEqual = self._symbol == other._symbol
-        movesEqual = str(self._moves) == str(other._moves)
-        boardsEqual = self._board == other._board
-        return symbolsEqual and movesEqual and boardsEqual
+        return self._board == other._board
+
+    def __gt__(self, other: Matchbox) -> bool:
+        """
+        Determines if this matchbox is later in the game than the other
+        :param other: The matchbox to compare against
+        :return: True if this matchbox has more symbols than the other, False otherwise
+        """
+        return self._board > other._board
+
+    def __ge__(self, other: Matchbox) -> bool:
+        """
+        Determines if this matchbox is on at least the same turn as the other
+        :param other: the matchbox to compare against
+        :return: True if this matchbox is at least as far into the game as the other, False otherwise
+        """
+        return self._board >= other._board
+
+    def __lt__(self, other: Matchbox) -> bool:
+        """
+        Determines if this matchbox is on an earlier turn than the other
+        :param other: the matchbox to compare against
+        :return: True if this matchbox has fewer symbols than the other, False otherwise
+        """
+        return self._board < other._board
+
+    def __le__(self, other: Matchbox) -> bool:
+        """
+        Determines if this matchbox is at most on the same turn as the other
+        :param other: the matchbox to compare against
+        :return: True if this matchbox has at most as many symbols as the other, False otherwise
+        """
+        return self._board <= other._board
+
+    def __ne__(self, other: Matchbox) -> bool:
+        """
+        Determines if the matchboxes are not on the same turn
+        :param other: the matchbox to compare against
+        :return: True if this matchbox is on a different turn than the other, False otherwise
+        """
+        return self._board != other._board
 
 
 def main():

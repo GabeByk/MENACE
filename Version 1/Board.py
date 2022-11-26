@@ -86,24 +86,20 @@ class Board:
         :param other: the Board that we should get to
         :return: The Transformation that would take us to the Board, or None if no such transformation exists.
         """
-        duplicate = copy(self)
         # with the bottom left at (0, 0) and the top right at (size - 1, size - 1), the center is just their midpoint
         center = ((self._size - 1) / 2, (self._size - 1) / 2)
         # check rotations for equivalence
         for i in range(4):
+            duplicate = copy(self)
             rotation = Rotation(center, 90 * i)
-            # while the Transformation class has a method for getting the inverse, using it is kind of expensive,
-            # so it's better to keep track of it manually where we can
-            inverseRotation = Rotation(center, -90 * i)
             # check if the rotation would make the board states equivalent
             duplicate.applyTransformation(rotation)
-            if duplicate == other:
+            if duplicate._grid == other._grid:
                 return rotation
-            # undo the rotation so we can check the next one
-            duplicate.applyTransformation(inverseRotation)
 
         # check the reflections
         for i in range(4):
+            duplicate = copy(self)
             # to reflect about the right line, we need to move the center to (0, 0), then flip, then move back
             translateToCenter = Translation(-center[0], -center[1])
             reflection = Reflection(45 * i)
@@ -113,10 +109,8 @@ class Board:
             # apply the transformation
             duplicate.applyTransformation(combinedTransformation)
             # check to see if they're the same
-            if duplicate == other:
+            if duplicate._grid == other._grid:
                 return combinedTransformation
-            # reflections undo themselves, so we can just apply it again to get to the original state
-            duplicate.applyTransformation(combinedTransformation)
 
         # if none of the transformations were equivalent, then no transformation exists
         return None
@@ -130,14 +124,56 @@ class Board:
         """
         return self.transformationTo(other) is not None
 
+    def sum(self) -> int:
+        """
+        Calculates the number of turns that have been taken on this Board
+        :return: The number of non-empty cells on the board (i.e. the number of cells that aren't Move.BLANK)
+        """
+        total = 0
+        for symbol in self._grid:
+            if symbol != Move.BLANK:
+                total += 1
+        return total
+
+    def __lt__(self, other: Board) -> bool:
+        """
+        Determines if this board has fewer symbols than the other
+        :param other: the Board to compare against
+        :return: True if this board has fewer symbols than the other, False otherwise
+        """
+        return self.sum() < other.sum()
+
+    def __le__(self, other: Board) -> bool:
+        """
+        Determines if this board doesn't have more symbols than the other
+        :param other: the Board to compare against
+        :return: True if this board has fewer symbols or the same number of symbols as the other, False otherwise
+        """
+        return self.sum() <= other.sum()
+
+    def __gt__(self, other: Board) -> bool:
+        """
+        Determines if this board has more symbols than the other
+        :param other: the Board to compare against
+        :return: True if this board has more symbols than the other, False otherwise
+        """
+        return not self <= other
+
+    def __ge__(self, other: Board) -> bool:
+        """
+        Determines if this board has at least as many symbols as the other
+        :param other: the Board to compare against
+        :return: True if this board has at least as many symbols as the other, False otherwise
+        """
+        return not self < other
+
     def __eq__(self, other: Board) -> bool:
         """
-        Compares the two boards to determine if they're exactly the same board state, including rotations and
-        reflections
+        Compares the two boards to determine if they have the same number of symbols
         :param other: the Board to compare to this one
-        :return: True if the boards are exactly the same, False otherwise
+        :return: True if the boards have the same number of symbols, False otherwise
         """
-        return self._grid == other._grid
+        return self.sum() == other.sum()
 
     def __ne__(self, other: Board) -> bool:
         """
@@ -160,33 +196,46 @@ class Board:
         Determines if there is a winner of the game
         :return: Which symbol won (one of Move.NOUGHT or Move.CROSS), or None if there is no winner or there's a draw
         """
+        # check for a winner in the columns
+        for column in range(self._size):
+            # if there's a winner, they have to match the first symbol in the row
+            winner = self._grid[column]
+            won = True
+            # if the first cell is blank, we can skip this row
+            if winner != Move.BLANK:
+                # check each cell in this row to see if it's the same as the first entry
+                for row in range(1, self._size):
+                    won = won and self._grid[row + self._size * column] == winner
+                # if every cell matched, we have a winner
+                if won:
+                    return winner
+
         # check for a winner in the rows
         for row in range(self._size):
-            winner = self._grid[row]
+            # essentially just the same as above but with the rows and columns flipped
+            winner = self._grid[row * self._size]
             won = True
             if winner != Move.BLANK:
                 for column in range(1, self._size):
                     won = won and self._grid[row + self._size * column] == winner
                 if won:
                     return winner
-        # check for a winner in the columns
-        for column in range(self._size):
-            winner = self._grid[column * self._size]
-            won = True
-            if winner != Move.BLANK:
-                for row in range(1, self._size):
-                    won = won and self._grid[row + self._size * column] == winner
-                if won:
-                    return winner
         # check for a winner in the diagonals
+        # grab the first entry of the diagonal
         mainDiagonalWinner = self._grid[0]
         alternateDiagonalWinner = self._grid[2 * self._size]
+        # we can only have won if the first cell isn't blank
         mainDiagonalWon = mainDiagonalWinner != Move.BLANK
         alternateDiagonalWon = alternateDiagonalWinner != Move.BLANK
+        # check each of the remaining cells
         for i in range(1, self._size):
+            # to go from one cell in the main diagonal (top left to bottom right) to the next, add self._size + 1
             mainDiagonalWon = mainDiagonalWon and self._grid[i * (self._size + 1)] == mainDiagonalWinner
-            alternateDiagonalWon = alternateDiagonalWon and \
-                                   self._grid[2 * self._size - i * (self._size - 1)] == alternateDiagonalWinner
+            # to go from one cell in the alternate diagonal (bottom left to top right) to the next,
+            # subtract self._size - 1
+            alternateDiagonalWon = alternateDiagonalWon and self._grid[2 * self._size -
+                                                                       i * (self._size - 1)] == alternateDiagonalWinner
+        # see if either diagonal won
         if mainDiagonalWon:
             return mainDiagonalWinner
         elif alternateDiagonalWon:
@@ -195,6 +244,10 @@ class Board:
         return None
 
     def isOver(self) -> bool:
+        """
+        Determines if the game is over
+        :return: True if there is a winner or it's a draw, False otherwise
+        """
         # a drawn game is over
         if Move.BLANK not in self._grid:
             return True
@@ -208,8 +261,10 @@ class Board:
         """
         result = []
         for row in range(self._size):
+            # add each item in the row going across
             for column in range(self._size):
                 result.append(self._grid[column + row * self._size])
+            # make the next row on the next line
             result.append("\n")
         return "".join(result)
 
@@ -224,33 +279,47 @@ def printTransformationsOf(b: Board, verbose: bool = False) -> None:
     b = copy(b)
     # to rotate about the correct point, we need to rotate about ((size - 1) / 2, (size - 1) / 2), since the points
     # go from (0, 0) to (size - 1, size - 1)
-    center = (b.size() / 2 - 0.5, b.size() / 2 - 0.5)
+    center = ((b.size() - 1) / 2, (b.size() - 1) / 2)
     rotate90 = Rotation(center, 90)
+    # check that each of the rotations work
     for i in range(4):
         b.applyTransformation(rotate90)
         assert b.isEquivalentTo(original)
+        # print the board if the user asked for it
         if verbose:
             print(b)
 
+    # check each of the reflections
     for i in range(4):
+        # since we're reflecting about a line that doesn't go through the coordinates (0, 0), we need to translate
         translateToCenter = Translation(-center[0], -center[1])
         reflection = Reflection(45 * i)
         translateBack = Translation(center[0], center[1])
         totalTransformation = translateBack * reflection * translateToCenter
+
         b.applyTransformation(totalTransformation)
         assert b.isEquivalentTo(original)
         if verbose:
             print(b)
+        # revert the transformation so we can do the next one
         b.applyTransformation(totalTransformation)
 
 
-def testTransformations(size: int = 3, verbose: bool = False):
+def testTransformations(size: int = 3, verbose: bool = False) -> None:
+    """
+    Tests each of the transformations on the board to ensure they work properly
+    :param size: the size of board to test
+    :param verbose: whether to print each board to the console for the user to check manually as well; defaults to False
+    """
+    # check that blank boards work
     b = Board(size)
     if verbose:
         print(b)
     printTransformationsOf(b, verbose)
+    # make a second copy 1 move behind to see if it works
     b2 = copy(b)
     lastMove = None
+    # fill each cell one at a time and make sure the transformations work
     for row in range(1, size + 1):
         for column in range(1, size + 1):
             pos = column + size * (row - 1)
@@ -260,10 +329,13 @@ def testTransformations(size: int = 3, verbose: bool = False):
                 symbol = Move.NOUGHT
             m = Move(row, column, symbol)
             b.makeMove(m)
+            # make whatever move we made last time on the other board so we can check that boards with a
+            # different number of moves are not equivalent
             if lastMove is not None:
                 b2.makeMove(lastMove)
             lastMove = m
             assert not b.isEquivalentTo(b2)
+            # print the board and each of its transformations
             if verbose:
                 print(b)
             printTransformationsOf(b, verbose)
@@ -271,18 +343,25 @@ def testTransformations(size: int = 3, verbose: bool = False):
 
 def maximallyAsymmetricTest(size: int = 3, verbose: bool = False) -> None:
     """
-    Tests that a board with format (0, 1, 2; 3, 4, 5; 6, 7, 8) is printed correctly and transformed correctly
+    Tests that a board with format (A B C; D E F; G H I) is printed correctly and transformed correctly
     """
     b = Board(size)
+    # populate the board with A B C; D E F; G H I for a 3x3
     for row in range(size):
         for column in range(size):
             b.makeMove(Move(row + 1, column + 1, chr(ord("A") + row + size * column)))
+    # check each of its transformations
     if verbose:
         print(b)
     printTransformationsOf(b, verbose)
 
 
 def testWinner(size: int = 3, verbose: bool = False):
+    """
+    Tests Board.winner to ensure it works properly
+    :param size: the size of board to test
+    :param verbose: whether to print each board to the console
+    """
     # test that it can find a winner in any column
     for column in range(1, size + 1):
         b = Board(size)
@@ -337,7 +416,6 @@ def main():
     b = Board(size)
     b.makeMove(Move(3, 1, "X"))
     print(b)
-    # testWinner(size, True)
 
 
 if __name__ == "__main__":

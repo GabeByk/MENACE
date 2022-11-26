@@ -19,17 +19,21 @@ class Transformation:
     """
     # the matrix to use to apply the transformation
     _matrix: Matrix
+    # the matrix used to keep track of the inverse
+    _inverse: Matrix
 
     def __init__(self, matrix: Matrix = None):
         """
         :param matrix: The matrix to use with this transformation; if not provided, defaults to the identity.
         """
         self._matrix = Matrix(3, 3)
+        self._inverse = Matrix(3, 3)
 
         if matrix is not None:
             self._matrix.setValues(matrix)
         else:
             self._matrix.setToIdentity()
+            self._inverse.setToIdentity()
 
     def transformationMatrix(self) -> Matrix:
         """
@@ -62,8 +66,10 @@ class Transformation:
         :param other: The Transformation to apply before applying this one
         :return: The combined Transformation that results in both actions being applied
         """
+        # if we're asked to do self * other, perform self * other
         result = Transformation(self._matrix * other._matrix)
-        # net translations are done correctly by the multiplication
+        # the inverse of self * other is other' * self'
+        result._inverse = other._inverse * self._inverse
         return result
 
     def __repr__(self) -> str:
@@ -78,38 +84,8 @@ class Transformation:
         Calculates and provides the transformation that undoes this one
         :return: A new Transformation that completely undoes this one
         """
-        # construct the matrix of minors
-        invertedMatrix = Matrix(3, 3)
-        for rowNumber in range(3):
-            for columnNumber in range(3):
-                minor = Matrix(2, 2)
-                minorValues = [[0 for i in range(2)] for i in range(2)]
-                # minor should be the original matrix except the values in the same row or column
-                for minorRowNumber in range(3):
-                    # determine whether we've passed the row
-                    rowOffset = 1
-                    if minorRowNumber < rowNumber:
-                        rowOffset = 0
-                    elif minorRowNumber > rowNumber:
-                        rowOffset = -1
-                    # rowOffset is 1 when this row should be removed, so we can skip the inner iteration
-                    if rowOffset != 1:
-                        for minorColumnNumber in range(3):
-                            # determine whether we've passed the column
-                            columnOffset = 1
-                            if minorColumnNumber < columnNumber:
-                                columnOffset = 0
-                            elif minorColumnNumber > columnNumber:
-                                columnOffset = -1
-                            # if we should keep the row and column, add it where it should go
-                            if columnOffset != 1:
-                                minorValues[minorRowNumber + rowOffset][minorColumnNumber + columnOffset] = \
-                                    self._matrix[minorRowNumber][minorColumnNumber]
-                minor.setValues(minorValues)
-                invertedMatrix[rowNumber][columnNumber] = (-1) ** (rowNumber + columnNumber) * minor.determinant()
-        # once we have the cofactor matrix, we just have to divide by the determinant and we're good to go
-        invertedMatrix *= 1 / self._matrix.determinant()
-        inverse = Transformation(invertedMatrix.transposed())
+        inverse = Transformation(self._inverse)
+        inverse._inverse.setValues(self._matrix)
         return inverse
 
     def __eq__(self, other: Transformation) -> bool:
@@ -118,6 +94,13 @@ class Transformation:
         :return: True if the transformations are the same up to floating point error, False otherwise
         """
         return self._matrix == other._matrix
+
+    def __ne__(self, other: Transformation) -> bool:
+        """
+        :param other: the Transformation to compare against
+        :return: True if the transformations are significantly different, False otherwise
+        """
+        return not self == other
 
 
 class Translation(Transformation):
@@ -131,6 +114,8 @@ class Translation(Transformation):
         super().__init__()
         self._matrix[0][2] = dx
         self._matrix[1][2] = dy
+        self._inverse[0][2] = -dx
+        self._inverse[1][2] = -dy
 
 
 class Rotation(Transformation):
@@ -147,32 +132,43 @@ class Rotation(Transformation):
         c = cos(toRadians(degrees))
 
         # set up the matrix for rotating about (0, 0)
-        pureRotation = Matrix(3, 3)
-        pureRotation.setToIdentity()
+        rotationMatrix = Matrix(3, 3)
+        rotationMatrix.setToIdentity()
         # rotation matrix to rotate clockwise by theta should look like this:
         # cos(theta) | sin(theta) | 0
         # -sin(theta)| cos(theta) | 0
         #      0     |      0     | 1
-        pureRotation[0][0] = c
-        pureRotation[0][1] = s
-        pureRotation[1][0] = -s
-        pureRotation[1][1] = c
+        rotationMatrix[0][0] = c
+        rotationMatrix[0][1] = s
+        rotationMatrix[1][0] = -s
+        rotationMatrix[1][1] = c
+
+        # the inverse of a rotation is a rotation by -degrees
+        # since cos is even and sin is odd, we can just negate sin and keep cos
+        inverseMatrix = Matrix(3, 3)
+        inverseMatrix.setToIdentity()
+        inverseMatrix[0][0] = c
+        inverseMatrix[0][1] = -s
+        inverseMatrix[1][0] = s
+        inverseMatrix[1][1] = c
+
+        pureRotation = Transformation(rotationMatrix)
+        pureRotation._inverse.setValues(inverseMatrix)
 
         # assign the proper transformation
         if center != (0, 0):
-            # to rotate about center, we need three steps (matrix multiplication makes it so transformations are applied
-            # in reverse order to how they're written):
-            self._matrix = (
-                    # Step 3: Move the center back to where it started
-                    Translation(center[0], center[1]) *
-                    # Step 2: Rotate about (0, 0)
-                    Transformation(pureRotation) *
-                    # Step 1: Move the center to (0, 0)
-                    Translation(-center[0], -center[1])
-                            ).transformationMatrix()
+            # to rotate about the center, we need to move the center to (0, 0), rotate about (0, 0), then move it back
+            # transformations are applied right to left, since the point is on the right during multiplication
+            completeTransformation = Translation(center[0], center[1]) *\
+                                     pureRotation *\
+                                     Translation(-center[0], -center[1])
+            # now we can just set our instance variables and it works
+            self._matrix = completeTransformation._matrix
+            self._inverse = completeTransformation._inverse
         else:
             # if the center is (0, 0), we can just rotate about it without translating
-            self._matrix = pureRotation
+            self._matrix = pureRotation._matrix
+            self._inverse = pureRotation._inverse
 
 
 class Scale(Transformation):
@@ -186,6 +182,8 @@ class Scale(Transformation):
         super().__init__()
         self._matrix[0][0] = xScale
         self._matrix[1][1] = yScale
+        self._inverse[0][0] = 1 / xScale
+        self._inverse[1][1] = 1 / yScale
 
 
 class Reflection(Transformation):
@@ -201,8 +199,11 @@ class Reflection(Transformation):
         flipAboutAxis = Scale(-1, 1)
         # +degrees rotates back to where it was
         rotateToStart = Rotation((0, 0), degrees)
-        total = rotateToStart * flipAboutAxis * rotateToAxis
-        self._matrix = total.transformationMatrix()
+
+        # compute the total transformation and extract the values we need
+        total: Transformation = rotateToStart * flipAboutAxis * rotateToAxis
+        self._matrix = total._matrix
+        self._inverse = total._inverse
 
 
 # code from here on out is to test the transformations
@@ -288,11 +289,4 @@ def main():
 
 
 if __name__ == "__main__":
-    rotation = Rotation((0, 0), 90)
-    point = (-2, 2)
-    print(point)
-    print(rotation.transformedPoint(point))
-    reflection = Reflection(0)
-    print(point)
-    print(reflection.transformedPoint(point))
-    # main()
+    main()

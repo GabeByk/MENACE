@@ -9,10 +9,11 @@ from Player import Player
 from Board import Board
 from Matchbox import Matchbox
 from Move import Move
+from util import BinarySearchTree
 
 
 class MENACE(Player):
-    _matchboxes: list[Matchbox]
+    _matchboxes: BinarySearchTree
     _movesMade: list[(Move, Matchbox)]
 
     def __init__(self, name: str = "MENACE", symbol: str = Move.CROSS) -> None:
@@ -22,7 +23,7 @@ class MENACE(Player):
         :param symbol: the symbol MENACE will play; defaults to Move.CROSS
         """
         super().__init__(name, symbol)
-        self._matchboxes = []
+        self._matchboxes = BinarySearchTree()
         self._movesMade = []
 
     @classmethod
@@ -43,16 +44,8 @@ class MENACE(Player):
         Makes a move on the given Board
         :param board: the Board to make a move on
         """
-        # TODO: Improve performance to match prototype
         # find or create the matchbox for this board state
-        correctMatchbox = None
-        for matchbox in self._matchboxes:
-            if matchbox.holdsBoardState(board):
-                correctMatchbox = matchbox
-                break
-        if correctMatchbox is None:
-            correctMatchbox = Matchbox(board, self.symbol())
-            self._matchboxes.append(correctMatchbox)
+        correctMatchbox = self._matchboxes.find(board, self.symbol())
 
         # make whichever move the matchbox gives us
         move = correctMatchbox.makeMove(board)

@@ -7,8 +7,12 @@
 from __future__ import annotations
 # heavily referenced https://docs.python.org/3/library/typing.html and various sub-links to better understand
 # type annotations for lists, tuples, and sequences
-from typing import List, Sequence
 from math import pi
+# learned this syntax from https://adamj.eu/tech/2021/05/13/python-type-hints-how-to-fix-circular-imports/
+from typing import List, Sequence, TYPE_CHECKING
+if TYPE_CHECKING:
+    from Matchbox import Matchbox
+    from Board import Board
 
 
 def toRadians(degrees: float) -> float:
@@ -43,6 +47,94 @@ class IllegalMoveError(Exception):
 
 class InvalidMoveError(Exception):
     pass
+
+class BinarySearchTree:
+    """
+    A Binary Search Tree for MENACE to use with Matchboxes and Boards
+    """
+    # the items in the tree
+    _items: List[Matchbox]
+    # the sums of the items in the tree
+    _sums: List[int]
+
+    def __init__(self):
+        self._items = []
+        self._sums = []
+
+    def append(self, item: Matchbox) -> None:
+        if len(self._items) == 0:
+            self._items.append(item)
+            self._sums.append(item.sum())
+        else:
+            # insert the item into the first spot where the list would be sorted
+            for i in range(len(self._items)):
+                if self._items[i] >= item:
+                    self._items.insert(i, item)
+                    self._sums.insert(i, item.sum())
+                    return
+            # if we're at this point, it must be larger than any item in the list; it belongs at the end
+            self._items.append(item)
+            self._sums.append(item.sum())
+
+    def __iter__(self) -> Matchbox:
+        for item in self._items:
+            yield item
+
+    def find(self, item: Board, symbol: str) -> Matchbox:
+        """
+        Find the Matchbox for the given Board, or create it if it doesn't exist
+        :param item: the Board state to find
+        :param symbol: the symbol to put on the box we create if we don't already have it
+        :return: the Matchbox corresponding to this board state; automatically creates a new one if it isn't in here
+        """
+        box = self._recursiveFind(item, 0, len(self._items))
+        if box is None:
+            from Matchbox import Matchbox
+            box = Matchbox(item, symbol)
+        return box
+
+    def _recursiveFind(self, item: Board, minPos: int, maxPos: int) -> Matchbox | None:
+        """
+        Tries to find the item in the subset of _items given by the bounds
+        :param item: the item to search for
+        :param minPos: the smallest bound that we should search
+        :param maxPos: the smallest bound we shouldn't search
+        :return: the Matchbox that matches Board, or None if no such matchbox exists.
+        """
+        # if we're trying to search a strip of length 0, it's not in here
+        if minPos == maxPos:
+            return None
+        # guess that the item we're looking for is in the middle of the list
+        guess = (minPos + maxPos) // 2
+        # keep track of how many moves our guess made and how many moves the item made
+        boxSum = self._sums[guess]
+        boardSum = item.sum()
+        # if item made fewer moves, it's somewhere before guess
+        if boardSum < boxSum:
+            return self._recursiveFind(item, minPos, guess)
+        # if item made more moves, it's somewhere after guess
+        elif boardSum > boxSum:
+            return self._recursiveFind(item, guess, maxPos)
+        # if they made the same number of moves, it's somewhere nearby
+        else:
+            # start from the middle of the section we're given and fan out
+            for i in range(round((minPos - maxPos) / 2)):
+                # check if we're still in bounds and if we need to look any further right or left
+                largerStillEqual = guess + i < maxPos and self._sums[guess + i] == boardSum
+                smallerStillEqual = guess - i >= minPos and self._sums[guess - i] == boardSum
+                # if neither way is worth looking, we can exit
+                if not largerStillEqual and not smallerStillEqual:
+                    return None
+
+                # use short circuit evaluation to skip evaluating states we know aren't equal from their sums
+                # first pass looks right
+                if largerStillEqual and self._items[guess + i].holdsBoardState(item):
+                    return self._items[guess + i]
+
+                # second pass looks left
+                elif smallerStillEqual and self._items[guess - i].holdsBoardState(item):
+                    return self._items[guess - i]
+
 
 class Matrix:
     """

@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="f551a5fb-ad2e-4f94-87a7-2fe0a95523a3" name="Changes" comment="Testing to see if I'm logged in on the right account">
-      <change beforePath="$PROJECT_DIR$/.idea/MENACE.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/MENACE.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="f551a5fb-ad2e-4f94-87a7-2fe0a95523a3" name="Changes" comment="Minor updates; updated Game.py to only open to and print to gameLogs.txt after each game ends, tested the prototype's performance, and added a TODO to improve Version 1's performance to match.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Prototype/menace1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Prototype/menace1.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Prototype/menace2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Prototype/menace2.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Prototype/textBasedMenaceVSMenace.py" beforeDir="false" afterPath="$PROJECT_DIR$/Prototype/textBasedMenaceVSMenace.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Version 1/Game.py" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/Game.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Version 1/Board.py" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/Board.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Version 1/MENACE.py" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/MENACE.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Version 1/Matchbox.py" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/Matchbox.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Version 1/Menace A.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/Menace A.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Version 1/Menace B.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/Menace B.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Version 1/Transformation.py" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/Transformation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Version 1/gameLogs.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/gameLogs.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Version 1/test.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Version 1/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Version 1/util.py" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/util.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -191,9 +193,9 @@
       <list>
         <item itemvalue="Python.main" />
         <item itemvalue="Python.textBasedMenaceVSMenace" />
-        <item itemvalue="Python.Board" />
         <item itemvalue="Python.Matchbox" />
         <item itemvalue="Python.Transformation" />
+        <item itemvalue="Python.Board" />
       </list>
     </recent_temporary>
   </component>
@@ -297,7 +299,14 @@
       <option name="project" value="LOCAL" />
       <updated>1669404851554</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Minor updates; updated Game.py to only open to and print to gameLogs.txt after each game ends, tested the prototype's performance, and added a TODO to improve Version 1's performance to match.">
+      <created>1669427778914</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1669427778914</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -305,7 +314,13 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="CUSTOM_BOOLEAN_PROPERTIES">
+                <map>
+                  <entry key="Show.Git.Branches" value="false" />
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
@@ -323,14 +338,15 @@
     <MESSAGE value="Extracted Matrix class, toRadians function, and MethodUndefinedError to util.py so they're in one central place instead of scattered across the module wherever they were first needed." />
     <MESSAGE value="Fixed formatting in all files; added the ability to get the inverse transformation for any Transformation and added transformation functionality to Boards. Next step is MENACE." />
     <MESSAGE value="Testing to see if I'm logged in on the right account" />
-    <option name="LAST_COMMIT_MESSAGE" value="Testing to see if I'm logged in on the right account" />
+    <MESSAGE value="Minor updates; updated Game.py to only open to and print to gameLogs.txt after each game ends, tested the prototype's performance, and added a TODO to improve Version 1's performance to match." />
+    <option name="LAST_COMMIT_MESSAGE" value="Minor updates; updated Game.py to only open to and print to gameLogs.txt after each game ends, tested the prototype's performance, and added a TODO to improve Version 1's performance to match." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Version 1/Matchbox.py</url>
-          <line>243</line>
+          <line>283</line>
           <option name="timeStamp" value="48" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -338,7 +354,27 @@
           <line>49</line>
           <option name="timeStamp" value="58" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Version 1/Board.py</url>
+          <line>175</line>
+          <option name="timeStamp" value="61" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Version 1/util.py</url>
+          <line>89</line>
+          <option name="timeStamp" value="63" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Version 1/util.py</url>
+          <line>104</line>
+          <option name="timeStamp" value="65" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+    <watches-manager>
+      <configuration name="PythonConfigurationType">
+        <watch expression="self._sums" />
+      </configuration>
+    </watches-manager>
   </component>
 </project>
