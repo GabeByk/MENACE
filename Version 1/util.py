@@ -41,6 +41,8 @@ class InvalidDimensionsError(Exception):
 class IllegalMoveError(Exception):
     pass
 
+class InvalidMoveError(Exception):
+    pass
 
 class Matrix:
     """

@@ -13,7 +13,6 @@ from util import IllegalMoveError
 
 
 class Board:
-
     # this Board is a _size by _size grid
     _size: int
     # a list containing the state of each of the _size x _size cells in the board.
@@ -27,7 +26,13 @@ class Board:
         :param size: the number of cells across the board; defaults to 3 (the usual board size) if not provided.
         """
         self._size = size
-        self._grid = [Move.BLANK for i in range(size * size)]
+        self.reset()
+
+    def reset(self) -> None:
+        """
+        Resets the board to an empty state
+        """
+        self._grid = [Move.BLANK for i in range(self._size * self._size)]
 
     def size(self) -> int:
         """
@@ -35,7 +40,7 @@ class Board:
         """
         return self._size
 
-    def isLegal(self, move: Move) -> bool:
+    def legalMove(self, move: Move) -> bool:
         """
         :param move: The move to check
         :return: True if the move is legal on this board, False otherwise
@@ -52,11 +57,12 @@ class Board:
         :param move: The Move to make
         :raises IllegalMoveError: If the move to be made was illegal
         """
-        if self.isLegal(move):
+        if self.legalMove(move):
             row, column = move.position()
+            # move's row and column numbers are 1 off of the index, so we need to adjust them
             self._grid[column - 1 + (row - 1) * self._size] = move.symbol()
         else:
-            raise IllegalMoveError(f"Move {move} is illegal with game state {self}")
+            raise IllegalMoveError(f"Move {move} is illegal with game state: \n{self}")
 
     def applyTransformation(self, t: Transformation) -> None:
         """
@@ -77,28 +83,25 @@ class Board:
     def transformationTo(self, other: Board) -> Transformation | None:
         """
         Determines the Transformation that would take this Board to the given Board, if one exists.
-        Mutates this board to determine which transformation works, but returns to the original state before returning.
         :param other: the Board that we should get to
         :return: The Transformation that would take us to the Board, or None if no such transformation exists.
         """
-
-        # with (0, 0) at one corner and (2, 2) at the other, the center to apply transformations about is given like so
-        center = (self._size / 2 - 0.5, self._size / 2 - 0.5)
-        # instead of returning immediately, keep track until we're back to the original state so we won't have changed
-        # the board in the comparison
-        desiredTransformation = None
+        duplicate = copy(self)
+        # with the bottom left at (0, 0) and the top right at (size - 1, size - 1), the center is just their midpoint
+        center = ((self._size - 1) / 2, (self._size - 1) / 2)
         # check rotations for equivalence
         for i in range(4):
             rotation = Rotation(center, 90 * i)
-            # the opposite of a rotation is a rotation by the opposite angle
-            undo = Rotation(center, -90 * i)
-            self.applyTransformation(rotation)
-            if self == other:
-                desiredTransformation = rotation
-            self.applyTransformation(undo)
-        # four 90 degree rotations returns us to the starting position, so now we can check if they're the same
-        if desiredTransformation is not None:
-            return desiredTransformation
+            # while the Transformation class has a method for getting the inverse, using it is kind of expensive,
+            # so it's better to keep track of it manually where we can
+            inverseRotation = Rotation(center, -90 * i)
+            # check if the rotation would make the board states equivalent
+            duplicate.applyTransformation(rotation)
+            if duplicate == other:
+                return rotation
+            # undo the rotation so we can check the next one
+            duplicate.applyTransformation(inverseRotation)
+
         # check the reflections
         for i in range(4):
             # to reflect about the right line, we need to move the center to (0, 0), then flip, then move back
@@ -108,23 +111,20 @@ class Board:
             # combine the transformations
             combinedTransformation = translateBack * reflection * translateToCenter
             # apply the transformation
-            self.applyTransformation(combinedTransformation)
+            duplicate.applyTransformation(combinedTransformation)
             # check to see if they're the same
-            if self == other:
-                desiredTransformation = combinedTransformation
+            if duplicate == other:
+                return combinedTransformation
             # reflections undo themselves, so we can just apply it again to get to the original state
-            self.applyTransformation(combinedTransformation)
-            # since we're back at the original state, we can return here
-            if desiredTransformation is not None:
-                return desiredTransformation
+            duplicate.applyTransformation(combinedTransformation)
+
         # if none of the transformations were equivalent, then no transformation exists
         return None
 
     def isEquivalentTo(self, other: Board) -> bool:
         """
         Determines if these boards are equivalent up to rotations and reflections, i.e. there exists a rotation or
-        reflection to get from this board to the other. Mutates this board throughout the method, but returns it to
-        the original state before returning.
+        reflection to get from this board to the other.
         :param other: the Board to compare
         :return: True if the boards are equivalent up to symmetry, False otherwise
         """
@@ -155,6 +155,53 @@ class Board:
         duplicate._grid = self._grid[:]
         return duplicate
 
+    def winner(self) -> str | None:
+        """
+        Determines if there is a winner of the game
+        :return: Which symbol won (one of Move.NOUGHT or Move.CROSS), or None if there is no winner or there's a draw
+        """
+        # check for a winner in the rows
+        for row in range(self._size):
+            winner = self._grid[row]
+            won = True
+            if winner != Move.BLANK:
+                for column in range(1, self._size):
+                    won = won and self._grid[row + self._size * column] == winner
+                if won:
+                    return winner
+        # check for a winner in the columns
+        for column in range(self._size):
+            winner = self._grid[column * self._size]
+            won = True
+            if winner != Move.BLANK:
+                for row in range(1, self._size):
+                    won = won and self._grid[row + self._size * column] == winner
+                if won:
+                    return winner
+        # check for a winner in the diagonals
+        mainDiagonalWinner = self._grid[0]
+        alternateDiagonalWinner = self._grid[2 * self._size]
+        mainDiagonalWon = mainDiagonalWinner != Move.BLANK
+        alternateDiagonalWon = alternateDiagonalWinner != Move.BLANK
+        for i in range(1, self._size):
+            mainDiagonalWon = mainDiagonalWon and self._grid[i * (self._size + 1)] == mainDiagonalWinner
+            alternateDiagonalWon = alternateDiagonalWon and \
+                                   self._grid[2 * self._size - i * (self._size - 1)] == alternateDiagonalWinner
+        if mainDiagonalWon:
+            return mainDiagonalWinner
+        elif alternateDiagonalWon:
+            return alternateDiagonalWinner
+        # if there was no winner anywhere, there is no winner
+        return None
+
+    def isOver(self) -> bool:
+        # a drawn game is over
+        if Move.BLANK not in self._grid:
+            return True
+        # if the game isn't drawn, then the game is over if and only if there is a winner
+        else:
+            return self.winner() is not None
+
     def __repr__(self) -> str:
         """
         :return: the string representation of this Board
@@ -162,18 +209,19 @@ class Board:
         result = []
         for row in range(self._size):
             for column in range(self._size):
-                result.append(self._grid[row + column * self._size])
+                result.append(self._grid[column + row * self._size])
             result.append("\n")
         return "".join(result)
 
 
-def printTransformationsOf(b: Board) -> None:
+def printTransformationsOf(b: Board, verbose: bool = False) -> None:
     """
     Prints each of the 8 transformations of the given board to the console
-    :param b: the Board to transform. will be mutated throughout, but returned to its original state before the function
-    ends.
+    :param b: the Board to transform.
+    :param verbose: If True, prints board states to the console
     """
     original = copy(b)
+    b = copy(b)
     # to rotate about the correct point, we need to rotate about ((size - 1) / 2, (size - 1) / 2), since the points
     # go from (0, 0) to (size - 1, size - 1)
     center = (b.size() / 2 - 0.5, b.size() / 2 - 0.5)
@@ -181,7 +229,8 @@ def printTransformationsOf(b: Board) -> None:
     for i in range(4):
         b.applyTransformation(rotate90)
         assert b.isEquivalentTo(original)
-        print(b)
+        if verbose:
+            print(b)
 
     for i in range(4):
         translateToCenter = Translation(-center[0], -center[1])
@@ -190,27 +239,16 @@ def printTransformationsOf(b: Board) -> None:
         totalTransformation = translateBack * reflection * translateToCenter
         b.applyTransformation(totalTransformation)
         assert b.isEquivalentTo(original)
-        print(b)
+        if verbose:
+            print(b)
         b.applyTransformation(totalTransformation)
 
 
-def maximallyAsymmetricTest(size: int = 3) -> None:
-    """
-    Tests that a board with format (0, 1, 2; 3, 4, 5; 6, 7, 8) is printed correctly and transformed correctly
-    """
+def testTransformations(size: int = 3, verbose: bool = False):
     b = Board(size)
-    for row in range(size):
-        for column in range(size):
-            b.makeMove(Move(row + 1, column + 1, chr(ord("A") + row + size * column)))
-    print(b)
-    printTransformationsOf(b)
-
-
-def main():
-    size = 3
-    b = Board(size)
-    print(b)
-    printTransformationsOf(b)
+    if verbose:
+        print(b)
+    printTransformationsOf(b, verbose)
     b2 = copy(b)
     lastMove = None
     for row in range(1, size + 1):
@@ -226,9 +264,80 @@ def main():
                 b2.makeMove(lastMove)
             lastMove = m
             assert not b.isEquivalentTo(b2)
+            if verbose:
+                print(b)
+            printTransformationsOf(b, verbose)
+
+
+def maximallyAsymmetricTest(size: int = 3, verbose: bool = False) -> None:
+    """
+    Tests that a board with format (0, 1, 2; 3, 4, 5; 6, 7, 8) is printed correctly and transformed correctly
+    """
+    b = Board(size)
+    for row in range(size):
+        for column in range(size):
+            b.makeMove(Move(row + 1, column + 1, chr(ord("A") + row + size * column)))
+    if verbose:
+        print(b)
+    printTransformationsOf(b, verbose)
+
+
+def testWinner(size: int = 3, verbose: bool = False):
+    # test that it can find a winner in any column
+    for column in range(1, size + 1):
+        b = Board(size)
+        if verbose:
             print(b)
-            printTransformationsOf(b)
-    maximallyAsymmetricTest(size)
+        for row in range(1, size + 1):
+            assert not b.isOver()
+            assert b.winner() is None
+            b.makeMove(Move(row, column, Move.CROSS))
+            if verbose:
+                print(b)
+        if verbose:
+            print(b.winner())
+        assert b.isOver()
+        assert b.winner() == Move.CROSS
+
+    # test that it can find a winner in any row
+    for row in range(1, size + 1):
+        b = Board(size)
+        if verbose:
+            print(b)
+        for column in range(1, size + 1):
+            assert not b.isOver()
+            assert b.winner() is None
+            b.makeMove(Move(row, column, Move.CROSS))
+            if verbose:
+                print(b)
+        if verbose:
+            print(b.winner())
+        assert b.isOver()
+        assert b.winner() == Move.CROSS
+
+    # test that it can find a winner in any diagonal
+    for top in ((1, 1), (1, 3)):
+        b = Board(size)
+        if verbose:
+            print(b)
+        for offset in range(3):
+            assert not b.isOver()
+            assert b.winner() is None
+            b.makeMove(Move(top[0] + offset, top[1] + offset * (-1) ** (top[1] // 2), Move.CROSS))
+            if verbose:
+                print(b)
+        if verbose:
+            print(b.winner())
+        assert b.isOver()
+        assert b.winner() == Move.CROSS
+
+
+def main():
+    size = 3
+    b = Board(size)
+    b.makeMove(Move(3, 1, "X"))
+    print(b)
+    # testWinner(size, True)
 
 
 if __name__ == "__main__":

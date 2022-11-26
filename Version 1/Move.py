@@ -4,6 +4,7 @@
 # 13 October 2022
 #
 
+from __future__ import annotations
 from typing import Tuple
 
 
@@ -40,3 +41,10 @@ class Move:
         :return: the symbol for this move
         """
         return self._symbol
+
+    def __repr__(self) -> str:
+        """
+        :return: A string of the format '(row, column): symbol'
+        """
+        return f"{self.position()}: {self.symbol()}"
+
