@@ -48,6 +48,11 @@ class Matchbox:
     # referenced https://realpython.com/python-multiple-constructors for this syntax
     @classmethod
     def fromString(cls, representation: str) -> Matchbox:
+        """
+        Constructs and returns a Matchbox from a string formatted as the result of str()
+        :param representation: a string of the same format as str(Matchbox)
+        :return: the Matchbox that is created
+        """
         boardString, symbol, movesString = representation.strip().split("; ")
         # set up the board correctly
         board = Board(int(len(boardString) ** 0.5))
@@ -123,55 +128,6 @@ class Matchbox:
         """
         return self._board.sum()
 
-    def _generateLegalMoves(self) -> None:
-        """
-        Populates self._moves with every legal move
-        """
-        board = self._board
-        # add an entry in _moves for each legal move
-        # keep track of which moves we've added so we can only add distinct moves
-        addedMoves = []
-        for row in range(board.size()):
-            for column in range(board.size()):
-                # check that the move is legal
-                move = Move(row + 1, column + 1, self._symbol)
-                if board.legalMove(move):
-                    # check that the move is distinct
-                    distinct = True
-                    # make the move we're checking
-                    currentBoard = copy(board)
-                    currentBoard.makeMove(move)
-                    # make each move we've added and see if the boards are equivalent;
-                    # if the boards are equivalent, so are the moves
-                    for addedMove in addedMoves:
-                        addedBoard = copy(board)
-                        addedBoard.makeMove(addedMove)
-                        distinct = distinct and not currentBoard.isEquivalentTo(addedBoard)
-                        if not distinct:
-                            break
-                    # if the legal move is distinct, add it
-                    if distinct:
-                        self._moves[move] = Matchbox.BEADS
-                        addedMoves.append(move)
-
-    def _adjust(self, move: Move, adjustment: int) -> None:
-        """
-        Adds or removes beads corresponding to the given move to the matchbox
-        :param move: the move to add or remove beads for
-        :param adjustment: the number of beads to add; negative values remove beads
-        :return:
-        """
-        try:
-            self._moves[move] += adjustment
-            # if this bead has no moves left, remove it
-            if self._moves[move] <= 0:
-                self._moves.pop(move)
-            # if there are no moves left at all, reset the matchbox
-            if len(self._moves) == 0:
-                self._generateLegalMoves()
-        except KeyError:
-            raise InvalidMoveError(f"Move {move} is illegal on board state \n{self._board}!") from None
-
     def learnFromWin(self, move: Move) -> None:
         """
         Adjusts the Matchbox to reflect that we won, making the given move more likely to be chosen in the future
@@ -208,6 +164,55 @@ class Matchbox:
         :return: True if the boards are equivalent up to symmetry, False otherwise
         """
         return board.isEquivalentTo(self._board)
+
+    def _adjust(self, move: Move, adjustment: int) -> None:
+        """
+        Adds or removes beads corresponding to the given move to the matchbox
+        :param move: the move to add or remove beads for
+        :param adjustment: the number of beads to add; negative values remove beads
+        :return:
+        """
+        try:
+            self._moves[move] += adjustment
+            # if this bead has no moves left, remove it
+            if self._moves[move] <= 0:
+                self._moves.pop(move)
+            # if there are no moves left at all, reset the matchbox
+            if len(self._moves) == 0:
+                self._generateLegalMoves()
+        except KeyError:
+            raise InvalidMoveError(f"Move {move} is illegal on board state \n{self._board}!") from None
+
+    def _generateLegalMoves(self) -> None:
+        """
+        Populates self._moves with every legal move
+        """
+        board = self._board
+        # add an entry in _moves for each legal move
+        # keep track of which moves we've added so we can only add distinct moves
+        addedMoves = []
+        for row in range(board.size()):
+            for column in range(board.size()):
+                # check that the move is legal
+                move = Move(row + 1, column + 1, self._symbol)
+                if board.legalMove(move):
+                    # check that the move is distinct
+                    distinct = True
+                    # make the move we're checking
+                    currentBoard = copy(board)
+                    currentBoard.makeMove(move)
+                    # make each move we've added and see if the boards are equivalent;
+                    # if the boards are equivalent, so are the moves
+                    for addedMove in addedMoves:
+                        addedBoard = copy(board)
+                        addedBoard.makeMove(addedMove)
+                        distinct = distinct and not currentBoard.isEquivalentTo(addedBoard)
+                        if not distinct:
+                            break
+                    # if the legal move is distinct, add it
+                    if distinct:
+                        self._moves[move] = Matchbox.BEADS
+                        addedMoves.append(move)
 
     def __repr__(self) -> str:
         """

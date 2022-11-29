@@ -14,7 +14,7 @@ from util import BinarySearchTree
 
 class MENACE(Player):
     _matchboxes: BinarySearchTree
-    _movesMade: list[(Move, Matchbox)]
+    _movesMade: list[tuple[Move, Matchbox]]
 
     def __init__(self, name: str = "MENACE", symbol: str = Move.CROSS) -> None:
         """

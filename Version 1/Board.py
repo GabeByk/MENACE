@@ -64,6 +64,81 @@ class Board:
         else:
             raise IllegalMoveError(f"Move {move} is illegal with game state: \n{self}")
 
+    def sum(self) -> int:
+        """
+        Calculates the number of turns that have been taken on this Board
+        :return: The number of non-empty cells on the board (i.e. the number of cells that aren't Move.BLANK)
+        """
+        total = 0
+        for symbol in self._grid:
+            if symbol != Move.BLANK:
+                total += 1
+        return total
+
+    def winner(self) -> str | None:
+        """
+        Determines if there is a winner of the game
+        :return: Which symbol won (one of Move.NOUGHT or Move.CROSS), or None if there is no winner or there's a draw
+        """
+        # check for a winner in the rows
+        for row in range(self._size):
+            # if there's a winner, they have to match the first symbol in the row
+            winner = self._grid[row * self._size]
+            won = True
+            # if the first cell is blank, we can skip this row
+            if winner != Move.BLANK:
+                # check each cell in this row to see if it's the same as the first entry
+                for column in range(1, self._size):
+                    won = won and self._grid[column + self._size * row] == winner
+                # if every cell matched, we have a winner
+                if won:
+                    return winner
+
+        # check for a winner in the columns
+        for column in range(self._size):
+            # essentially just the same as above but with the rows and columns flipped
+            winner = self._grid[column]
+            won = True
+            if winner != Move.BLANK:
+                for row in range(1, self._size):
+                    won = won and self._grid[column + self._size * row] == winner
+                if won:
+                    return winner
+        # check for a winner in the diagonals
+        # grab the first entry of the diagonal
+        mainDiagonalWinner = self._grid[0]
+        alternateDiagonalWinner = self._grid[(self._size - 1) * self._size]
+        # we can only have won if the first cell isn't blank
+        mainDiagonalWon = mainDiagonalWinner != Move.BLANK
+        alternateDiagonalWon = alternateDiagonalWinner != Move.BLANK
+        # check each of the remaining cells
+        for i in range(1, self._size):
+            # to go from one cell in the main diagonal (top left to bottom right) to the next, add self._size + 1
+            mainDiagonalWon = mainDiagonalWon and self._grid[i * (self._size + 1)] == mainDiagonalWinner
+            # to go from one cell in the alternate diagonal (bottom left to top right) to the next,
+            # subtract self._size - 1
+            alternateDiagonalWon = alternateDiagonalWon and self._grid[(self._size - 1) * self._size -
+                                                                       i * (self._size - 1)] == alternateDiagonalWinner
+        # see if either diagonal won
+        if mainDiagonalWon:
+            return mainDiagonalWinner
+        elif alternateDiagonalWon:
+            return alternateDiagonalWinner
+        # if there was no winner anywhere, there is no winner
+        return None
+
+    def isOver(self) -> bool:
+        """
+        Determines if the game is over
+        :return: True if there is a winner or it's a draw, False otherwise
+        """
+        # a drawn game is over
+        if Move.BLANK not in self._grid:
+            return True
+        # if the game isn't drawn, then the game is over if and only if there is a winner
+        else:
+            return self.winner() is not None
+
     def applyTransformation(self, t: Transformation) -> None:
         """
         Applies the given Transformation to this Board.
@@ -124,17 +199,6 @@ class Board:
         """
         return self.transformationTo(other) is not None
 
-    def sum(self) -> int:
-        """
-        Calculates the number of turns that have been taken on this Board
-        :return: The number of non-empty cells on the board (i.e. the number of cells that aren't Move.BLANK)
-        """
-        total = 0
-        for symbol in self._grid:
-            if symbol != Move.BLANK:
-                total += 1
-        return total
-
     def __lt__(self, other: Board) -> bool:
         """
         Determines if this board has fewer symbols than the other
@@ -190,70 +254,6 @@ class Board:
         duplicate = Board(self._size)
         duplicate._grid = self._grid[:]
         return duplicate
-
-    def winner(self) -> str | None:
-        """
-        Determines if there is a winner of the game
-        :return: Which symbol won (one of Move.NOUGHT or Move.CROSS), or None if there is no winner or there's a draw
-        """
-        # check for a winner in the columns
-        for column in range(self._size):
-            # if there's a winner, they have to match the first symbol in the row
-            winner = self._grid[column]
-            won = True
-            # if the first cell is blank, we can skip this row
-            if winner != Move.BLANK:
-                # check each cell in this row to see if it's the same as the first entry
-                for row in range(1, self._size):
-                    won = won and self._grid[row + self._size * column] == winner
-                # if every cell matched, we have a winner
-                if won:
-                    return winner
-
-        # check for a winner in the rows
-        for row in range(self._size):
-            # essentially just the same as above but with the rows and columns flipped
-            winner = self._grid[row * self._size]
-            won = True
-            if winner != Move.BLANK:
-                for column in range(1, self._size):
-                    won = won and self._grid[row + self._size * column] == winner
-                if won:
-                    return winner
-        # check for a winner in the diagonals
-        # grab the first entry of the diagonal
-        mainDiagonalWinner = self._grid[0]
-        alternateDiagonalWinner = self._grid[2 * self._size]
-        # we can only have won if the first cell isn't blank
-        mainDiagonalWon = mainDiagonalWinner != Move.BLANK
-        alternateDiagonalWon = alternateDiagonalWinner != Move.BLANK
-        # check each of the remaining cells
-        for i in range(1, self._size):
-            # to go from one cell in the main diagonal (top left to bottom right) to the next, add self._size + 1
-            mainDiagonalWon = mainDiagonalWon and self._grid[i * (self._size + 1)] == mainDiagonalWinner
-            # to go from one cell in the alternate diagonal (bottom left to top right) to the next,
-            # subtract self._size - 1
-            alternateDiagonalWon = alternateDiagonalWon and self._grid[2 * self._size -
-                                                                       i * (self._size - 1)] == alternateDiagonalWinner
-        # see if either diagonal won
-        if mainDiagonalWon:
-            return mainDiagonalWinner
-        elif alternateDiagonalWon:
-            return alternateDiagonalWinner
-        # if there was no winner anywhere, there is no winner
-        return None
-
-    def isOver(self) -> bool:
-        """
-        Determines if the game is over
-        :return: True if there is a winner or it's a draw, False otherwise
-        """
-        # a drawn game is over
-        if Move.BLANK not in self._grid:
-            return True
-        # if the game isn't drawn, then the game is over if and only if there is a winner
-        else:
-            return self.winner() is not None
 
     def __repr__(self) -> str:
         """
@@ -395,14 +395,15 @@ def testWinner(size: int = 3, verbose: bool = False):
         assert b.winner() == Move.CROSS
 
     # test that it can find a winner in any diagonal
-    for top in ((1, 1), (1, 3)):
+    for i in range(2):
+        top = ((1, 1), (1, size))[i]
         b = Board(size)
         if verbose:
             print(b)
-        for offset in range(3):
+        for offset in range(size):
             assert not b.isOver()
             assert b.winner() is None
-            b.makeMove(Move(top[0] + offset, top[1] + offset * (-1) ** (top[1] // 2), Move.CROSS))
+            b.makeMove(Move(top[0] + offset, top[1] + offset * (-1) ** i, Move.CROSS))
             if verbose:
                 print(b)
         if verbose:
@@ -412,10 +413,7 @@ def testWinner(size: int = 3, verbose: bool = False):
 
 
 def main():
-    size = 3
-    b = Board(size)
-    b.makeMove(Move(3, 1, "X"))
-    print(b)
+    testWinner(5, True)
 
 
 if __name__ == "__main__":

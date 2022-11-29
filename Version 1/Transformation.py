@@ -76,9 +76,8 @@ class Transformation:
         """
         :return: the string representation of this Transformation's matrix
         """
-        return str(self.transformationMatrix())
+        return str(self._matrix)
 
-    # referenced https://youtu.be/xZBbfLLfVV4 for the general algorithm
     def getInverse(self) -> Transformation:
         """
         Calculates and provides the transformation that undoes this one

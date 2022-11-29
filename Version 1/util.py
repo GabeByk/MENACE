@@ -5,11 +5,11 @@
 #
 
 from __future__ import annotations
+from math import pi
 # heavily referenced https://docs.python.org/3/library/typing.html and various sub-links to better understand
 # type annotations for lists, tuples, and sequences
-from math import pi
-# learned this syntax from https://adamj.eu/tech/2021/05/13/python-type-hints-how-to-fix-circular-imports/
 from typing import List, Sequence, TYPE_CHECKING
+# learned this syntax from https://adamj.eu/tech/2021/05/13/python-type-hints-how-to-fix-circular-imports/
 if TYPE_CHECKING:
     from Matchbox import Matchbox
     from Board import Board
@@ -62,6 +62,10 @@ class BinarySearchTree:
         self._sums = []
 
     def append(self, item: Matchbox) -> None:
+        """
+        Add the given Matchbox to the tree
+        :param item: the Matchbox to add
+        """
         if len(self._items) == 0:
             self._items.append(item)
             self._sums.append(item.sum())
@@ -85,12 +89,14 @@ class BinarySearchTree:
         Find the Matchbox for the given Board, or create it if it doesn't exist
         :param item: the Board state to find
         :param symbol: the symbol to put on the box we create if we don't already have it
-        :return: the Matchbox corresponding to this board state; automatically creates a new one if it isn't in here
+        :return: the Matchbox corresponding to this board state; automatically creates a new one and adds it if it
+        isn't in here
         """
         box = self._recursiveFind(item, 0, len(self._items))
         if box is None:
             from Matchbox import Matchbox
             box = Matchbox(item, symbol)
+            self.append(box)
         return box
 
     def _recursiveFind(self, item: Board, minPos: int, maxPos: int) -> Matchbox | None:
@@ -104,6 +110,12 @@ class BinarySearchTree:
         # if we're trying to search a strip of length 0, it's not in here
         if minPos == maxPos:
             return None
+        # if there's only one item, we can find it by hand
+        elif minPos + 1 == maxPos:
+            if self._items[minPos].holdsBoardState(item):
+                return self._items[minPos]
+            else:
+                return None
         # guess that the item we're looking for is in the middle of the list
         guess = (minPos + maxPos) // 2
         # keep track of how many moves our guess made and how many moves the item made

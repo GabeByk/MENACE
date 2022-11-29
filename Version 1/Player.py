@@ -14,7 +14,7 @@ class Player:
     An interface for interacting with a Tic-Tac-Toe game. To use, create a class that inherits from this, and implement
     makeMove. You may override any of the other methods to your liking, but you must override makeMove.
     """
-    # The symbol this Player will play: one of Board.X or Board.O
+    # The symbol this Player will play: one of Board.CROSS or Board.NOUGHT
     _symbol: str
     # The name assigned to this Player
     _name: str
