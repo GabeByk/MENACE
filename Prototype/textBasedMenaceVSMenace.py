@@ -3,12 +3,12 @@ from TransformableBoard import TransformableBoard, Board
 from time import time
 
 TRAIN = True
-def main():
+def main(verbose: bool = False):
     # for now, if MENACE learns to forfeit, make a new one
     m1 = MENACE(Board.naught, "menace1.txt")
     m2 = MENACE(Board.cross, "menace2.txt")
     b = TransformableBoard()
-    if not TRAIN:
+    if verbose:
         print(b)
         print()
     moves = 0
@@ -20,13 +20,13 @@ def main():
         else:
             m2.makeMove(b)
         moves += 1
-        if not TRAIN:
+        if verbose:
             print(b)
             print()
     assert moves <= 9
 
     winner = b.getWinner()
-    if not TRAIN:
+    if verbose:
         if winner is not None:
             print(f"Player {winner} won in {moves} moves!")
         else:
@@ -40,10 +40,10 @@ def main():
 
 
 if __name__ == "__main__":
-    reps = 200
+    reps = 50
     start = time()
     for i in range(reps):
-        print(i)
-        main()
+        # print(i)
+        main(False)
     end = time()
     print(f"Finished {reps} games in {end - start} seconds!")

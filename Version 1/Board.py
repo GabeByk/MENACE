@@ -163,24 +163,26 @@ class Board:
         """
         # with the bottom left at (0, 0) and the top right at (size - 1, size - 1), the center is just their midpoint
         center = ((self._size - 1) / 2, (self._size - 1) / 2)
+        # these transformations are needed for the rotations and reflections
+        translateToOrigin = Translation(-center[0], -center[1])
+        translateBack = Translation(center[0], center[1])
         # check rotations for equivalence
         for i in range(4):
             duplicate = copy(self)
-            rotation = Rotation(center, 90 * i)
+            pureRotation = Rotation((0, 0), 90 * i)
+            combinedRotation = translateBack * pureRotation * translateToOrigin
             # check if the rotation would make the board states equivalent
-            duplicate.applyTransformation(rotation)
+            duplicate.applyTransformation(combinedRotation)
             if duplicate._grid == other._grid:
-                return rotation
+                return combinedRotation
 
         # check the reflections
         for i in range(4):
             duplicate = copy(self)
             # to reflect about the right line, we need to move the center to (0, 0), then flip, then move back
-            translateToCenter = Translation(-center[0], -center[1])
             reflection = Reflection(45 * i)
-            translateBack = Translation(center[0], center[1])
             # combine the transformations
-            combinedTransformation = translateBack * reflection * translateToCenter
+            combinedTransformation = translateBack * reflection * translateToOrigin
             # apply the transformation
             duplicate.applyTransformation(combinedTransformation)
             # check to see if they're the same

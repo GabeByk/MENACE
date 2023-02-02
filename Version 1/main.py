@@ -12,21 +12,29 @@ from time import time
 
 
 def menaceVsMenace(iterations, menace1File: str | None = None, menace2File: str | None = None, size: int = 3) -> None:
-    try:
-        m1 = MENACE.fromFile(menace1File)
-    except FileNotFoundError:
-        m1 = MENACE(menace1File[:-4])
-    try:
-        m2 = MENACE.fromFile(menace2File)
-    except FileNotFoundError:
-        m2 = MENACE(menace2File[:-4])
+    if menace1File is not None:
+        try:
+            m1 = MENACE.fromFile(menace1File)
+        except FileNotFoundError:
+            m1 = MENACE(menace1File[:-4])
+    else:
+        m1 = MENACE("Menace 1")
+    if menace2File is not None:
+        try:
+            m2 = MENACE.fromFile(menace2File)
+        except FileNotFoundError:
+            m2 = MENACE(menace2File[:-4])
+    else:
+        m2 = MENACE("Menace 2")
     g = Game(m1, m2, size)
     for i in range(iterations):
         winner = g.playGame(gameLogs)
         m1.learn(winner)
         m2.learn(winner)
-    m1.save(menace1File)
-    m2.save(menace2File)
+    if menace1File is not None:
+        m1.save(menace1File)
+    if menace2File is not None:
+        m2.save(menace2File)
 
 
 def humanVsHuman() -> None:
@@ -67,12 +75,13 @@ gameLogs = "5x5 test.txt"
 
 def main():
     readLogs(gameLogs)
-    size = 5
+    size = 3
     # humanVsHuman()
     rounds = 50
 
     start = time()
-    menaceVsMenace(rounds, "5x5 MENACE Test 1.txt", "5x5 MENACE Test 2.txt", size)
+    menaceVsMenace(rounds, f"Menace 1.txt", f"Menace 2.txt", size)
+    # menaceVsMenace(rounds, size=size)
     end = time()
     # human = Human("Gabe")
     # menace = MENACE.fromFile("Menace 2.txt")

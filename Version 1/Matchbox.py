@@ -183,36 +183,71 @@ class Matchbox:
         except KeyError:
             raise InvalidMoveError(f"Move {move} is illegal on board state \n{self._board}!") from None
 
+    # def _generateLegalMoves(self) -> None:
+    #     """
+    #     Populates self._moves with every legal move
+    #     """
+    #     board = self._board
+    #     # add an entry in _moves for each legal move
+    #     # keep track of which moves we've added so we can only add distinct moves
+    #     addedMoves = []
+    #     for row in range(board.size()):
+    #         for column in range(board.size()):
+    #             # check that the move is legal
+    #             move = Move(row + 1, column + 1, self._symbol)
+    #             if board.legalMove(move):
+    #                 # check that the move is distinct
+    #                 distinct = True
+    #                 # make the move we're checking
+    #                 currentBoard = copy(board)
+    #                 currentBoard.makeMove(move)
+    #                 # make each move we've added and see if the boards are equivalent;
+    #                 # if the boards are equivalent, so are the moves
+    #                 for addedMove in addedMoves:
+    #                     addedBoard = copy(board)
+    #                     addedBoard.makeMove(addedMove)
+    #                     distinct = distinct and not currentBoard.isEquivalentTo(addedBoard)
+    #                     if not distinct:
+    #                         break
+    #                 # if the legal move is distinct, add it
+    #                 if distinct:
+    #                     self._moves[move] = Matchbox.BEADS
+    #                     addedMoves.append(move)
     def _generateLegalMoves(self) -> None:
         """
         Populates self._moves with every legal move
         """
         board = self._board
         # add an entry in _moves for each legal move
-        # keep track of which moves we've added so we can only add distinct moves
-        addedMoves = []
+        # keep track of which possible moves are legal
+        legalMoves = []
         for row in range(board.size()):
             for column in range(board.size()):
                 # check that the move is legal
                 move = Move(row + 1, column + 1, self._symbol)
                 if board.legalMove(move):
-                    # check that the move is distinct
-                    distinct = True
-                    # make the move we're checking
-                    currentBoard = copy(board)
-                    currentBoard.makeMove(move)
-                    # make each move we've added and see if the boards are equivalent;
-                    # if the boards are equivalent, so are the moves
-                    for addedMove in addedMoves:
-                        addedBoard = copy(board)
-                        addedBoard.makeMove(addedMove)
-                        distinct = distinct and not currentBoard.isEquivalentTo(addedBoard)
-                        if not distinct:
-                            break
-                    # if the legal move is distinct, add it
-                    if distinct:
-                        self._moves[move] = Matchbox.BEADS
-                        addedMoves.append(move)
+                    legalMoves.append(move)
+
+        # check that each move we add is distinct
+        # keep track of which moves we've added so we can only add distinct moves
+        addedMoves = []
+        for move in legalMoves:
+            distinct = True
+            # make the move we're checking
+            currentBoard = copy(board)
+            currentBoard.makeMove(move)
+            # make each move we've added and see if the boards are equivalent;
+            # if the boards are equivalent, so are the moves
+            for addedMove in addedMoves:
+                addedBoard = copy(board)
+                addedBoard.makeMove(addedMove)
+                distinct = distinct and not currentBoard.isEquivalentTo(addedBoard)
+                if not distinct:
+                    break
+            # if the legal move is distinct, add it
+            if distinct:
+                self._moves[move] = Matchbox.BEADS
+                addedMoves.append(move)
 
     def __repr__(self) -> str:
         """
