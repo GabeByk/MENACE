@@ -130,7 +130,7 @@ class BinarySearchTree:
         # if they made the same number of moves, it's somewhere nearby
         else:
             # start from the middle of the section we're given and fan out
-            for i in range(round((minPos - maxPos) / 2)):
+            for i in range(round((maxPos - minPos) / 2)):
                 # check if we're still in bounds and if we need to look any further right or left
                 largerStillEqual = guess + i < maxPos and self._sums[guess + i] == boardSum
                 smallerStillEqual = guess - i >= minPos and self._sums[guess - i] == boardSum

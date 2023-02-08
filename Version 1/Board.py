@@ -173,7 +173,7 @@ class Board:
             combinedRotation = translateBack * pureRotation * translateToOrigin
             # check if the rotation would make the board states equivalent
             duplicate.applyTransformation(combinedRotation)
-            if duplicate._grid == other._grid:
+            if duplicate == other:
                 return combinedRotation
 
         # check the reflections
@@ -186,11 +186,46 @@ class Board:
             # apply the transformation
             duplicate.applyTransformation(combinedTransformation)
             # check to see if they're the same
-            if duplicate._grid == other._grid:
+            if duplicate == other:
                 return combinedTransformation
 
         # if none of the transformations were equivalent, then no transformation exists
         return None
+
+    def equivalentBoards(self) -> tuple[Board]:
+        """
+        :return: a tuple of all boards equivalent to this one
+        """
+        boards: list[Board] = []
+
+        # with the bottom left at (0, 0) and the top right at (size - 1, size - 1), the center is just their midpoint
+        center = ((self._size - 1) / 2, (self._size - 1) / 2)
+        # these transformations are needed for the rotations and reflections
+        translateToOrigin = Translation(-center[0], -center[1])
+        translateBack = Translation(center[0], center[1])
+        # calculate the total 90 degree rotation
+        pureRotation = Rotation((0, 0), 90)
+        combinedRotation = translateBack * pureRotation * translateToOrigin
+        # check rotations for equivalence
+        for i in range(4):
+            # check if the rotation would make the board states equivalent
+            self.applyTransformation(combinedRotation)
+            if self not in boards:
+                boards.append(copy(self))
+
+        # check the reflections
+        for i in range(4):
+            duplicate = copy(self)
+            # to reflect about the right line, we need to move the center to (0, 0), then flip, then move back
+            reflection = Reflection(45 * i)
+            # combine the transformations
+            combinedTransformation = translateBack * reflection * translateToOrigin
+            # apply the transformation
+            duplicate.applyTransformation(combinedTransformation)
+            # check to see if they're the same
+            if duplicate not in boards:
+                boards.append(copy(duplicate))
+        return tuple(boards)
 
     def isEquivalentTo(self, other: Board) -> bool:
         """
@@ -201,45 +236,13 @@ class Board:
         """
         return self.transformationTo(other) is not None
 
-    def __lt__(self, other: Board) -> bool:
-        """
-        Determines if this board has fewer symbols than the other
-        :param other: the Board to compare against
-        :return: True if this board has fewer symbols than the other, False otherwise
-        """
-        return self.sum() < other.sum()
-
-    def __le__(self, other: Board) -> bool:
-        """
-        Determines if this board doesn't have more symbols than the other
-        :param other: the Board to compare against
-        :return: True if this board has fewer symbols or the same number of symbols as the other, False otherwise
-        """
-        return self.sum() <= other.sum()
-
-    def __gt__(self, other: Board) -> bool:
-        """
-        Determines if this board has more symbols than the other
-        :param other: the Board to compare against
-        :return: True if this board has more symbols than the other, False otherwise
-        """
-        return not self <= other
-
-    def __ge__(self, other: Board) -> bool:
-        """
-        Determines if this board has at least as many symbols as the other
-        :param other: the Board to compare against
-        :return: True if this board has at least as many symbols as the other, False otherwise
-        """
-        return not self < other
-
     def __eq__(self, other: Board) -> bool:
         """
-        Compares the two boards to determine if they have the same number of symbols
+        Compares the two boards to determine if they match exactly
         :param other: the Board to compare to this one
-        :return: True if the boards have the same number of symbols, False otherwise
+        :return: True if the boards are exactly the same; False otherwise
         """
-        return self.sum() == other.sum()
+        return self._grid == other._grid
 
     def __ne__(self, other: Board) -> bool:
         """

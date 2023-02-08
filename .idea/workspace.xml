@@ -4,18 +4,24 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f551a5fb-ad2e-4f94-87a7-2fe0a95523a3" name="Changes" comment="test commit from mac">
-      <change beforePath="$PROJECT_DIR$/.idea/MENACE.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/MENACE.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="f551a5fb-ad2e-4f94-87a7-2fe0a95523a3" name="Changes" comment="Spent time trying to determine why Version 1's performance is worse; modified Matchbox._generateLegalMoves, however performance is not significantly better. More time should be invested determining which methods take up all the extra time, or else modifying the prototype to be a separate trainer application.">
+      <change afterPath="$PROJECT_DIR$/Version 1/game.py.lprof" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Version 1/main.py.lprof" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Version 1/performanceTester.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Version 1/performanceTester.py.lprof" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/duplicateChecker.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Prototype/menace1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Prototype/menace1.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Prototype/menace2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Prototype/menace2.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Prototype/textBasedMenaceVSMenace.py" beforeDir="false" afterPath="$PROJECT_DIR$/Prototype/textBasedMenaceVSMenace.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Version 1/5x5 test.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/5x5 test.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Version 1/Board.py" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/Board.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Version 1/MENACE.py" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/MENACE.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Version 1/Matchbox.py" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/Matchbox.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Version 1/Menace 1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/Menace 1.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Version 1/Menace 2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/Menace 2.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Version 1/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Version 1/util.py" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/util.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,26 +53,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "last_opened_file_path": "/Users/gabe/Desktop/MENACE",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/gabe/Desktop/MENACE&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\gabej\PycharmProjects\MENACE\Version 1" />
       <recent name="C:\Users\gabej\PycharmProjects\MENACE" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
       <recent name="C:\Users\gabej\PycharmProjects\MENACE\Version 1" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.main">
+  <component name="RunManager" selected="Python.textBasedMenaceVSMenace">
     <configuration name="Board" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="MENACE" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -88,7 +95,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Matchbox" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="duplicateChecker" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="MENACE" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -100,28 +107,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Version 1/Matchbox.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="Transformation" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="MENACE" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Version 1" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Version 1/Transformation.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/duplicateChecker.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -143,6 +129,27 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Version 1/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="performanceTester" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="MENACE" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Version 1" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Version 1/performanceTester.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -195,11 +202,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.main" />
         <item itemvalue="Python.textBasedMenaceVSMenace" />
+        <item itemvalue="Python.duplicateChecker" />
+        <item itemvalue="Python.main" />
+        <item itemvalue="Python.performanceTester" />
         <item itemvalue="Python.Board" />
-        <item itemvalue="Python.Matchbox" />
-        <item itemvalue="Python.Transformation" />
       </list>
     </recent_temporary>
   </component>
@@ -324,7 +331,14 @@
       <option name="project" value="LOCAL" />
       <updated>1675355497249</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Spent time trying to determine why Version 1's performance is worse; modified Matchbox._generateLegalMoves, however performance is not significantly better. More time should be invested determining which methods take up all the extra time, or else modifying the prototype to be a separate trainer application.">
+      <created>1675359628581</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1675359628581</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -360,14 +374,15 @@
     <MESSAGE value="Changed Transformations to keep track of their inverses with each multiplication, added a Binary Search Tree to util.py for MENACE to use internally, and added code to time how long it takes to play games. Performance has been improved pretty dramatically, but not quite to the level of the prototype; performance warrants further investigation." />
     <MESSAGE value="Test commit from new Mac" />
     <MESSAGE value="test commit from mac" />
-    <option name="LAST_COMMIT_MESSAGE" value="test commit from mac" />
+    <MESSAGE value="Spent time trying to determine why Version 1's performance is worse; modified Matchbox._generateLegalMoves, however performance is not significantly better. More time should be invested determining which methods take up all the extra time, or else modifying the prototype to be a separate trainer application." />
+    <option name="LAST_COMMIT_MESSAGE" value="Spent time trying to determine why Version 1's performance is worse; modified Matchbox._generateLegalMoves, however performance is not significantly better. More time should be invested determining which methods take up all the extra time, or else modifying the prototype to be a separate trainer application." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Version 1/Matchbox.py</url>
-          <line>323</line>
+          <line>307</line>
           <option name="timeStamp" value="48" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -376,19 +391,14 @@
           <option name="timeStamp" value="58" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Version 1/Board.py</url>
-          <line>241</line>
-          <option name="timeStamp" value="61" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Prototype/textBasedMenaceVSMenace.py</url>
           <line>42</line>
           <option name="timeStamp" value="75" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Version 1/main.py</url>
-          <line>82</line>
-          <option name="timeStamp" value="78" />
+          <url>file://$PROJECT_DIR$/Version 1/util.py</url>
+          <line>94</line>
+          <option name="timeStamp" value="80" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

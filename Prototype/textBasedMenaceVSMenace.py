@@ -40,7 +40,7 @@ def main(verbose: bool = False):
 
 
 if __name__ == "__main__":
-    reps = 50
+    reps = 5000
     start = time()
     for i in range(reps):
         # print(i)

@@ -13,7 +13,7 @@ from util import BinarySearchTree
 
 
 class MENACE(Player):
-    _matchboxes: BinarySearchTree
+    _matchboxes: dict[str: Matchbox]
     _movesMade: list[tuple[Move, Matchbox]]
 
     def __init__(self, name: str = "MENACE", symbol: str = Move.CROSS) -> None:
@@ -23,7 +23,7 @@ class MENACE(Player):
         :param symbol: the symbol MENACE will play; defaults to Move.CROSS
         """
         super().__init__(name, symbol)
-        self._matchboxes = BinarySearchTree()
+        self._matchboxes = dict()
         self._movesMade = []
 
     @classmethod
@@ -36,7 +36,7 @@ class MENACE(Player):
             for line in infile:
                 if len(line) > 2:
                     matchbox = Matchbox.fromString(line)
-                    menace._matchboxes.append(matchbox)
+                    menace._matchboxes[matchbox.label()] = matchbox
         return menace
 
     def makeMove(self, board: Board) -> None:
@@ -45,12 +45,31 @@ class MENACE(Player):
         :param board: the Board to make a move on
         """
         # find or create the matchbox for this board state
-        correctMatchbox = self._matchboxes.find(board, self.symbol())
+        correctMatchbox = self._matchboxFor(board)
 
         # make whichever move the matchbox gives us
         move = correctMatchbox.makeMove(board)
         # remember the move and matchbox so we can learn later
         self._movesMade.append((move, correctMatchbox))
+
+    def _matchboxFor(self, board: Board) -> Matchbox:
+        """
+        Finds or creates the matchbox for this board state
+        :param board: the board state to find
+        :return: the existing matchbox in _matchboxes, or creates and adds one if there isn't one
+        """
+        # see if we have an equivalent board already
+        for equivalentBoard in board.equivalentBoards():
+            try:
+                # if the lookup succeeds, we've found the correct board
+                return self._matchboxes[str(equivalentBoard)]
+            except KeyError:
+                # if the lookup fails, try the next board
+                pass
+        # if we get to this point, we don't; create one
+        box = Matchbox(board, self._symbol)
+        self._matchboxes[box.label()] = box
+        return box
 
     def learn(self, winner: str | None) -> None:
         """
@@ -76,5 +95,5 @@ class MENACE(Player):
         """
         with open(filename, "w") as outfile:
             print(self, file=outfile)
-            for matchbox in self._matchboxes:
+            for matchbox in self._matchboxes.values():
                 print(matchbox, file=outfile)

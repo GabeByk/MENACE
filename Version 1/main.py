@@ -74,10 +74,10 @@ def readLogs(filename: str = "gameLogs.txt"):
 gameLogs = "5x5 test.txt"
 
 def main():
-    readLogs(gameLogs)
+    # readLogs(gameLogs)
     size = 3
     # humanVsHuman()
-    rounds = 50
+    rounds = 500
 
     start = time()
     menaceVsMenace(rounds, f"Menace 1.txt", f"Menace 2.txt", size)
@@ -86,9 +86,7 @@ def main():
     # human = Human("Gabe")
     # menace = MENACE.fromFile("Menace 2.txt")
     # humanVsMenace(human, menace)
-    print()
-    readLogs(gameLogs)
-    print()
+    # readLogs(gameLogs)
     print(f"Finished {rounds} games in {end - start} seconds!")
 
 
