@@ -171,11 +171,11 @@ gameLogs = "5x5 test.txt"
 
 def main():
     # readLogs(gameLogs)
-    size = 3
+    size = 5
     # humanVsHuman()
-    rounds = 500
+    rounds = 5
 
-    menaceVsMenace(rounds, f"Menace 1.txt", f"Menace 2.txt", size)
+    menaceVsMenace(rounds, f"5x5 Menace 1.txt", f"5x5 Menace 2.txt", size)
     # menaceVsMenace(rounds, size=size)
     # human = Human("Gabe")
     # menace = MENACE.fromFile("Menace 2.txt")
@@ -256,7 +256,6 @@ class Matchbox:
         # since this is a class method, we need to return the box we constructed
         return box
 
-    @profile
     def makeMove(self, board: Board) -> Move:
         """
         Makes a random move on the given board, with the weights of each option dictated by the beads for each move
@@ -369,6 +368,7 @@ class Matchbox:
         for board in self._board.equivalentBoards():
             labels.append(str(board))
         return tuple(labels)
+
     def _generateLegalMoves(self) -> None:
         """
         Populates self._moves with every legal move
@@ -594,6 +594,7 @@ class Board:
         else:
             return self.winner() is not None
 
+    # @profile
     def applyTransformation(self, t: Transformation) -> None:
         """
         Applies the given Transformation to this Board.
@@ -610,6 +611,7 @@ class Board:
                 newGrid[newRow + self._size * newColumn] = self._grid[row + self._size * column]
         self._grid = newGrid
 
+    # @profile
     def transformationTo(self, other: Board) -> Transformation | None:
         """
         Determines the Transformation that would take this Board to the given Board, if one exists.
@@ -917,7 +919,6 @@ class MENACE(Player):
         # remember the move and matchbox so we can learn later
         self._movesMade.append((move, correctMatchbox))
 
-    @profile
     def _matchboxFor(self, board: Board) -> Matchbox:
         """
         Finds or creates the matchbox for this board state
@@ -1109,22 +1110,34 @@ class Transformation:
         duplicate.setValues(self._matrix)
         return duplicate
 
+    # @profile
     def transformedPoint(self, position: Tuple[float, float]) -> Tuple[float, float]:
         """
         Applies the transformation to the given x, y values in the plane.
         :param position: the x, y value to transform
         :return: the transformed x, y values
-        """
-        # create a matrix for the given position
-        point = Matrix(3, 1)
-        point[0][0], point[1][0] = position
-        point[2][0] = 1
-        # transform the point to its image
-        image = self._matrix * point
-        # scale the image so its third value is 1
-        image = image * (1 / image[2][0])
-        # return the x, y values of the image
-        return image[0][0], image[1][0]
+        # """
+        # # create a matrix for the given position
+        # point = Matrix(3, 1)
+        # point[0][0], point[1][0] = position
+        # point[2][0] = 1
+        # # transform the point to its image
+        # image = self._matrix * point
+        # # scale the image so its third value is 1
+        # image = image * (1 / image[2][0])
+        # # return the x, y values of the image
+        # return image[0][0], image[1][0]
+
+        # extract the contents of the matrix
+        a, b, c = self._matrix[0]
+        d, e, f = self._matrix[1]
+        g, h, i = self._matrix[2]
+        # extract the original x and y coordinates
+        x, y = position
+        # the final result needs to be scaled by this much
+        adjustment = g * x + h * y + i
+        # multiplying a general matrix by a column vector gives this formula for the result
+        return (a * x + b * y + c) / adjustment, (d * x + e * y + f) / adjustment
 
     def __mul__(self, other: Transformation) -> Transformation:
         """
@@ -1668,4 +1681,4 @@ def testMatrices():
     print(m2 * 2)
 
 if __name__ == "__main__":
-    main()
+    testMatrices()

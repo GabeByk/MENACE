@@ -49,16 +49,16 @@ class Transformation:
         :param position: the x, y value to transform
         :return: the transformed x, y values
         """
-        # create a matrix for the given position
-        point = Matrix(3, 1)
-        point[0][0], point[1][0] = position
-        point[2][0] = 1
-        # transform the point to its image
-        image = self._matrix * point
-        # scale the image so its third value is 1
-        image = image * (1 / image[2][0])
-        # return the x, y values of the image
-        return image[0][0], image[1][0]
+        # extract the contents of the matrix
+        a, b, c = self._matrix[0]
+        d, e, f = self._matrix[1]
+        g, h, i = self._matrix[2]
+        # extract the original x and y coordinates
+        x, y = position
+        # the final result needs to be scaled by this much
+        adjustment = g * x + h * y + i
+        # multiplying a general matrix by a column vector gives this formula for the result
+        return (a * x + b * y + c) / adjustment, (d * x + e * y + f) / adjustment
 
     def __mul__(self, other: Transformation) -> Transformation:
         """

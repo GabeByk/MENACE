@@ -4,24 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f551a5fb-ad2e-4f94-87a7-2fe0a95523a3" name="Changes" comment="Spent time trying to determine why Version 1's performance is worse; modified Matchbox._generateLegalMoves, however performance is not significantly better. More time should be invested determining which methods take up all the extra time, or else modifying the prototype to be a separate trainer application.">
-      <change afterPath="$PROJECT_DIR$/Version 1/game.py.lprof" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Version 1/main.py.lprof" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Version 1/performanceTester.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Version 1/performanceTester.py.lprof" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/duplicateChecker.py" afterDir="false" />
+    <list default="true" id="f551a5fb-ad2e-4f94-87a7-2fe0a95523a3" name="Changes" comment="Significantly improved performance issues and fixed bugs.&#10;Performance:&#10;MENACE now uses a dictionary to store matchboxes, which significantly improved lookup times. Applying transformations to boards seems to be the current bottleneck for performance, so optimizations should be focused there if desired, however current performance seems acceptable: 500 games can be played between two MENACES on my Macbook in under 20 seconds.&#10;Bugs:&#10;A bug was found in the BinarySearchTree which caused existing matchboxes to not be found when requested; this led to many matchboxes for the same board state. The primary issue was fixed, but some duplicate board states were still found by duplicateChecker.py; no duplicate states have been found since switching away from the Binary Search Tree, so it is likely the culprit.">
+      <change afterPath="$PROJECT_DIR$/Version 1/5x5 Menace 1.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Version 1/5x5 Menace 2.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Version 1/5x5 Menace 3.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Version 1/5x5 Menace 4.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Prototype/menace1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Prototype/menace1.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Prototype/menace2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Prototype/menace2.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Prototype/textBasedMenaceVSMenace.py" beforeDir="false" afterPath="$PROJECT_DIR$/Prototype/textBasedMenaceVSMenace.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Menaces.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Menaces.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Version 1/5x5 test.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/5x5 test.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Version 1/Board.py" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/Board.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Version 1/MENACE.py" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/MENACE.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Version 1/Matchbox.py" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/Matchbox.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Version 1/Menace 1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/Menace 1.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Version 1/Menace 2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/Menace 2.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Version 1/Transformation.py" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/Transformation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Version 1/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Version 1/util.py" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/util.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Version 1/performanceTester.py" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/performanceTester.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Version 1/performanceTester.py.lprof" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/performanceTester.py.lprof" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/duplicateChecker.py" beforeDir="false" afterPath="$PROJECT_DIR$/duplicateChecker.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,7 +71,7 @@
     </key>
   </component>
   <component name="RunManager" selected="Python.textBasedMenaceVSMenace">
-    <configuration name="Board" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="Transformation" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="MENACE" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -86,7 +83,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Version 1/Board.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Version 1/Transformation.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -203,10 +200,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.textBasedMenaceVSMenace" />
-        <item itemvalue="Python.duplicateChecker" />
         <item itemvalue="Python.main" />
+        <item itemvalue="Python.duplicateChecker" />
+        <item itemvalue="Python.Transformation" />
         <item itemvalue="Python.performanceTester" />
-        <item itemvalue="Python.Board" />
       </list>
     </recent_temporary>
   </component>
@@ -338,7 +335,14 @@
       <option name="project" value="LOCAL" />
       <updated>1675359628581</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="Significantly improved performance issues and fixed bugs.&#10;Performance:&#10;MENACE now uses a dictionary to store matchboxes, which significantly improved lookup times. Applying transformations to boards seems to be the current bottleneck for performance, so optimizations should be focused there if desired, however current performance seems acceptable: 500 games can be played between two MENACES on my Macbook in under 20 seconds.&#10;Bugs:&#10;A bug was found in the BinarySearchTree which caused existing matchboxes to not be found when requested; this led to many matchboxes for the same board state. The primary issue was fixed, but some duplicate board states were still found by duplicateChecker.py; no duplicate states have been found since switching away from the Binary Search Tree, so it is likely the culprit.">
+      <created>1675868886532</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1675868886532</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -375,7 +379,8 @@
     <MESSAGE value="Test commit from new Mac" />
     <MESSAGE value="test commit from mac" />
     <MESSAGE value="Spent time trying to determine why Version 1's performance is worse; modified Matchbox._generateLegalMoves, however performance is not significantly better. More time should be invested determining which methods take up all the extra time, or else modifying the prototype to be a separate trainer application." />
-    <option name="LAST_COMMIT_MESSAGE" value="Spent time trying to determine why Version 1's performance is worse; modified Matchbox._generateLegalMoves, however performance is not significantly better. More time should be invested determining which methods take up all the extra time, or else modifying the prototype to be a separate trainer application." />
+    <MESSAGE value="Significantly improved performance issues and fixed bugs.&#10;Performance:&#10;MENACE now uses a dictionary to store matchboxes, which significantly improved lookup times. Applying transformations to boards seems to be the current bottleneck for performance, so optimizations should be focused there if desired, however current performance seems acceptable: 500 games can be played between two MENACES on my Macbook in under 20 seconds.&#10;Bugs:&#10;A bug was found in the BinarySearchTree which caused existing matchboxes to not be found when requested; this led to many matchboxes for the same board state. The primary issue was fixed, but some duplicate board states were still found by duplicateChecker.py; no duplicate states have been found since switching away from the Binary Search Tree, so it is likely the culprit." />
+    <option name="LAST_COMMIT_MESSAGE" value="Significantly improved performance issues and fixed bugs.&#10;Performance:&#10;MENACE now uses a dictionary to store matchboxes, which significantly improved lookup times. Applying transformations to boards seems to be the current bottleneck for performance, so optimizations should be focused there if desired, however current performance seems acceptable: 500 games can be played between two MENACES on my Macbook in under 20 seconds.&#10;Bugs:&#10;A bug was found in the BinarySearchTree which caused existing matchboxes to not be found when requested; this led to many matchboxes for the same board state. The primary issue was fixed, but some duplicate board states were still found by duplicateChecker.py; no duplicate states have been found since switching away from the Binary Search Tree, so it is likely the culprit." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
