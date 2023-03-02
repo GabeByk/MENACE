@@ -380,7 +380,7 @@ class Matchbox:
         for row in range(board.size()):
             for column in range(board.size()):
                 # check that the move is legal
-                move = Move(row + 1, column + 1, self._symbol)
+                move = Move(row, column, self._symbol)
                 if board.legalMove(move):
                     legalMoves.append(move)
 

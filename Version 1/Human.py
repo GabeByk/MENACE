@@ -32,7 +32,8 @@ class Human(Player):
                 continue
             if 1 <= row <= board.size() and 1 <= column <= board.size():
                 # we have a valid board position; now create the move and return it
-                return Move(row, column, self.symbol())
+                # subtract 1 from the row and column numbers to be 0 indexed rather than 1 indexed
+                return Move(row - 1, column - 1, self.symbol())
             else:
                 print(f"Please make sure your input is between 1 and {board.size()}.")
 
@@ -49,9 +50,3 @@ class Human(Player):
             move = self._askForMove(board)
         board.makeMove(move)
 
-
-class HumanUI(Human):
-    """
-    A modified version of the Human class that works with a GUI.
-    """
-    pass

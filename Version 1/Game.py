@@ -8,8 +8,6 @@ from Board import Board
 from Player import Player
 from Human import Human
 from Move import Move
-from typing import List
-
 
 class Game:
     # the Board this game is played on
@@ -56,10 +54,6 @@ class Game:
         if logfile is not None:
             with open(logfile, "a") as outfile:
                 print("\n".join(logs), file=outfile)
+        else:
+            print(logs)
         return winner
-
-
-class GameUI(Game):
-    """
-    An extension of the Game class that uses a GUI instead of the Python Console to run the game.
-    """

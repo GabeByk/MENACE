@@ -58,8 +58,8 @@ class Matchbox:
         board = Board(int(len(boardString) ** 0.5))
         for position in range(len(boardString)):
             moveSymbol = boardString[position]
-            row = position // board.size() + 1
-            column = position % board.size() + 1
+            row = position // board.size()
+            column = position % board.size()
             board.makeMove(Move(row, column, moveSymbol))
         # at this point we have enough information to make the matchbox
         box = cls(board, symbol, generateMoves=False)
@@ -208,7 +208,7 @@ class Matchbox:
         for row in range(board.size()):
             for column in range(board.size()):
                 # check that the move is legal
-                move = Move(row + 1, column + 1, self._symbol)
+                move = Move(row, column, self._symbol)
                 if board.legalMove(move):
                     legalMoves.append(move)
 
@@ -294,7 +294,7 @@ def main():
     b1 = Board()
     b2 = Board()
     for i in range(9):
-        move = Move(i // 3 + 1, i % 3 + 1, str(i))
+        move = Move(i // 3, i % 3, str(i))
         if i % 2 == 0:
             b1.makeMove(move)
         else:

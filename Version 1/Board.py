@@ -47,7 +47,7 @@ class Board:
         """
         row, column = move.position()
         try:
-            return self._grid[column - 1 + self._size * (row - 1)] == Move.BLANK
+            return self._grid[column + self._size * row] == Move.BLANK
         except IndexError:
             return False
 
@@ -60,7 +60,7 @@ class Board:
         if self.legalMove(move):
             row, column = move.position()
             # move's row and column numbers are 1 off of the index, so we need to adjust them
-            self._grid[column - 1 + (row - 1) * self._size] = move.symbol()
+            self._grid[column + row * self._size] = move.symbol()
         else:
             raise IllegalMoveError(f"Move {move} is illegal with game state: \n{self}")
 
@@ -144,7 +144,8 @@ class Board:
         Applies the given Transformation to this Board.
         :param t: the Transformation to apply
         """
-        newGrid = [Move.BLANK for i in range(self._size * self._size)]
+        # self._grid[destinations[i]] should be replaced with self._grid[i]
+        destinations: list[int] = []
         for row in range(self._size):
             for column in range(self._size):
                 # we need to transform from row x column y to coordinate space;
@@ -152,8 +153,26 @@ class Board:
                 x, y = t.transformedPoint((float(column), float(self._size - 1 - row)))
                 # transfer from point space back to row/column space
                 newRow, newColumn = round(self._size - 1 - y), round(x)
-                newGrid[newRow + self._size * newColumn] = self._grid[row + self._size * column]
-        self._grid = newGrid
+                destinations.append(newColumn + newRow * self._size)
+        cycles: list[list[int]] = []
+        processed: set[int] = set()
+        for origin, destination in enumerate(destinations):
+            if origin != destination and origin not in processed:
+                cycle = [origin, destination]
+                # while we haven't gotten back to where we started,
+                while destinations[cycle[-1]] != origin:
+                    cycle.append(destinations[cycle[-1]])
+                    processed.add(cycle[-1])
+                cycles.append(cycle)
+            processed.add(origin)
+            processed.add(destination)
+        for cycle in cycles:
+            while len(cycle) > 1:
+                destination = cycle.pop()
+                self._swap(cycle[0], destination)
+
+    def _swap(self, pos1: int, pos2: int) -> None:
+        self._grid[pos1], self._grid[pos2] = self._grid[pos2], self._grid[pos1]
 
     def transformationTo(self, other: Board) -> Transformation | None:
         """
@@ -325,9 +344,9 @@ def testTransformations(size: int = 3, verbose: bool = False) -> None:
     b2 = copy(b)
     lastMove = None
     # fill each cell one at a time and make sure the transformations work
-    for row in range(1, size + 1):
-        for column in range(1, size + 1):
-            pos = column + size * (row - 1)
+    for row in range(0, size):
+        for column in range(0, size):
+            pos = column + size * row
             if pos % 2 == 0:
                 symbol = Move.CROSS
             else:
@@ -418,7 +437,7 @@ def testWinner(size: int = 3, verbose: bool = False):
 
 
 def main():
-    testWinner(5, True)
+    testTransformations(3, True)
 
 
 if __name__ == "__main__":

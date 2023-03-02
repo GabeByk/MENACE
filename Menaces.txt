@@ -12,3 +12,5 @@
 ../Version 1/5x5 Menace 2.txt
 ../Version 1/5x5 Menace 3.txt
 ../Version 1/5x5 Menace 4.txt
+../Version 1/First GUI MENACE.txt
+../Version 1/Second GUI MENACE.txt
