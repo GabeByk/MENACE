@@ -6,7 +6,8 @@
 
 from __future__ import annotations
 from Board import Board
-from random import randrange
+# found random.choice here: https://www.geeksforgeeks.org/how-to-get-weighted-random-choice-in-python/
+from random import choices
 from util import InvalidMoveError
 from copy import copy
 from Move import Move
@@ -90,31 +91,12 @@ class Matchbox:
         Makes a random move on the given board, with the weights of each option dictated by the beads for each move
         :param board: the Board to make a move on
         """
-        # create a list of moves where moves with multiple beads are included multiple times
-        weightedMoves = []
-        for move in self._moves.keys():
-            # add a copy of the move for each of its beads
-            for i in range(self._moves[move]):
-                weightedMoves.append(move)
-
-        # choose a random move
-        movePosition = randrange(len(weightedMoves))
-        move = weightedMoves[movePosition]
+        # get a random move
+        move = choices(tuple(self._moves.keys()), tuple(self._moves.values()))[0]
 
         # make the move
         # transform the given board so the move is legal
         transformation = board.transformationTo(self._board)
-        loops = 0
-        while transformation is None:
-            if loops == 0:
-                print("Bug happened; trying again")
-            transformation = board.transformationTo(self._board)
-            loops += 1
-            if loops == 100:
-                print("What?? 100 times in a row??")
-                break
-        if loops > 0 and transformation is not None:
-            print(f"Fixed after {loops} attempt(s).")
         board.applyTransformation(transformation)
         board.makeMove(move)
         # undo the transformation so it looks like it did before

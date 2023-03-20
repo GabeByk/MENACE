@@ -9,8 +9,33 @@ from graphics import *
 from Move import Move
 from Board import Board
 from Player import Player
+from MENACE import MENACE
 from Human import Human
 from Game import Game
+
+class Button:
+    """
+    A simple button class
+    """
+    _border: Rectangle
+    _label: Text
+
+    def __init__(self, center: Point, width: float, height: float, label: str):
+        topLeft = Point(center.x - width / 2, center.y - height / 2)
+        bottomRight = Point(center.x + width / 2, center.y + height / 2)
+        self._border = Rectangle(topLeft, bottomRight)
+        self._label = Text(center, label)
+
+    def isClicked(self, click: Point) -> bool:
+        return self._border.p1.x <= click.x <= self._border.p2.x and self._border.p1.y <= click.y <= self._border.p2.y
+
+    def draw(self, window: GraphWin) -> None:
+        self._border.draw(window)
+        self._label.draw(window)
+
+    def undraw(self) -> None:
+        self._border.undraw()
+        self._label.undraw()
 
 class BoardUI(Board):
     """
@@ -28,11 +53,11 @@ class BoardUI(Board):
         :param width: how wide and tall to make the board
         :param size: how many cells across the board is; default is 3 for a regular Tic-Tac-Toe board
         """
-        super().__init__(size)
         self._center = center
         self._width = width
         self._cells = []
         self._separators = []
+        super().__init__(size)
         self._generateUI()
 
     def _generateUI(self) -> None:
@@ -94,6 +119,11 @@ class BoardUI(Board):
         else:
             return None
 
+    def reset(self) -> None:
+        super().reset()
+        for cell in self._cells:
+            cell.setText("")
+
 
     def draw(self, win: GraphWin) -> None:
         for separator in self._separators:
@@ -112,23 +142,47 @@ class HumanUI(Human):
     A modified version of the Human class that works with a GUI.
     """
     _window: GraphWin
+    _errorMessage: Text
 
-    def __init__(self, window: GraphWin, name: str = "", symbol: str = None):
+    def __init__(self, window: GraphWin, errorMessage: Text = None, name: str = "", symbol: str = None):
         super().__init__(name, symbol)
         self._window = window
+        self._errorMessage = errorMessage
 
     def _askForMove(self, board: BoardUI) -> Move:
         p = self._window.getMouse()
+        self._errorMessage.setText("")
         m = board.moveFromClick(p, self.symbol())
         while m is None:
-            print("Please click on the board.")
             p = self._window.getMouse()
             m = board.moveFromClick(p, self.symbol())
-        print(m)
         return m
 
     def _reportIllegalMove(self) -> None:
-        print("Sorry, that move was illegal. Try somewhere else.")
+        self._errorMessage.setText("That move was illegal. Please try again.")
+
+class PlayerSelector:
+    _name: Entry
+    _type: Entry
+
+    def __init__(self, center: Point) -> None:
+        self._name = Entry(Point(center.x - 100, center.y), 20)
+        self._name.setText("Enter name")
+        self._type = Entry(Point(center.x + 100, center.y), 20)
+        self._type.setText("Enter type")
+        for entry in (self._name, self._type):
+            entry.setFill(color_rgb(225, 225, 225))
+
+    def getPlayer(self) -> tuple[str, str]:
+        return self._type.getText(), self._name.getText()
+
+    def draw(self, window: GraphWin) -> None:
+        self._name.draw(window)
+        self._type.draw(window)
+
+    def undraw(self) -> None:
+        self._name.undraw()
+        self._type.undraw()
 
 class GameUI(Game):
     """
@@ -136,26 +190,97 @@ class GameUI(Game):
     """
     _window: GraphWin
     _board: BoardUI
+    _player1Selector: PlayerSelector
+    _player2Selector: PlayerSelector
+    _boardSizeEntry: Entry
+    _submitButton: Button
+    _quitButton: Button
 
-    def __init__(self, player1: Player, player2: Player, window: GraphWin, boardSize: int = 3):
-        super().__init__(player1, player2, boardSize)
-        self._window = window
-        boardX = window.getWidth() / 2
-        boardY = window.getHeight() / 2
+    def __init__(self):
+        # call super's init here to make PyCharm happy; it will be called again from startGame
+        super().__init__(Player(), Player(), 1)
+        self._window = GraphWin("MENACE", 800, 600)
+        self._player1Selector = PlayerSelector(Point(400, 300))
+        self._player2Selector = PlayerSelector(Point(400, 350))
+        self._boardSizeEntry = Entry(Point(400, 400), 5)
+        self._boardSizeEntry.setText("3")
+        self._boardSizeEntry.setFill(color_rgb(225, 225, 225))
+        self._errorMessage = Text(Point(400, 450), "")
+        self._errorMessage.draw(self._window)
+        self._submitButton = Button(Point(400 - 75, 500), 125, 50, "Submit")
+        self._quitButton = Button(Point(400 + 75, 500), 125, 50, "Quit")
+
+    def playGame(self, logfile: str | None = "gameLogs.txt") -> str | None:
+        self._setupGame()
+        self._startGame()
+        results = super().playGame(logfile)
+        self._board.undraw()
+        self._errorMessage.setText("")
+        if isinstance(self._players[0], MENACE):
+            # i'm not sure how to convince PyCharm that this is acceptable
+            player: MENACE = self._players[0]
+            player.learn(results)
+            player.save(player.name() + ".txt")
+        if isinstance(self._players[1], MENACE):
+            player: MENACE = self._players[1]
+            player.learn(results)
+            player.save(player.name() + ".txt")
+        return results
+
+    def _setupGame(self) -> None:
+        """
+        Waits for data from the user and ensures that it's valid, or quits the game
+        """
+        validPlayers = ("HUMAN", "MENACE")
+        self._window.redraw()
+        self._player1Selector.draw(self._window)
+        self._player2Selector.draw(self._window)
+        self._boardSizeEntry.draw(self._window)
+        self._submitButton.draw(self._window)
+        self._quitButton.draw(self._window)
+        while True:
+            p = self._window.getMouse()
+            while not self._submitButton.isClicked(p) and not self._quitButton.isClicked(p):
+                p = self._window.getMouse()
+            if self._quitButton.isClicked(p):
+                self._window.close()
+                exit()
+            player1Data = self._player1Selector.getPlayer()
+            player2Data = self._player2Selector.getPlayer()
+            boardSize = self._boardSizeEntry.getText()
+            # if int(boardSize) doesn't work, skip the rest and loop again
+            try:
+                if int(boardSize) < 0:
+                    self._errorMessage.setText("Please enter a valid board size.")
+                    continue
+            except ValueError:
+                self._errorMessage.setText("Please enter a valid board size.")
+                continue
+            if player1Data[0].upper() in validPlayers and player2Data[0].upper() in validPlayers:
+                break
+            elif player2Data[0].upper() in validPlayers:
+                self._errorMessage.setText("Please enter a valid type of player for player 1. The supported types are Human and MENACE.")
+            else:
+                self._errorMessage.setText("Please enter a valid type of player for player 2. The supported types are Human and MENACE.")
+        self._player1Selector.undraw()
+        self._player2Selector.undraw()
+        self._boardSizeEntry.undraw()
+        self._errorMessage.setText("")
+        self._submitButton.undraw()
+        self._quitButton.undraw()
+
+    def _startGame(self) -> None:
+        self._window.redraw()
+        players: list[Player] = []
+        for playerType, playerName in (self._player1Selector.getPlayer(), self._player2Selector.getPlayer()):
+            if playerType.lower() == "human":
+                players.append(HumanUI(self._window, self._errorMessage, playerName))
+            elif playerType.upper() == "MENACE":
+                players.append(MENACE.fromFile(playerName + ".txt"))
+
+        boardSize = int(self._boardSizeEntry.getText())
+        super().__init__(players[0], players[1], boardSize)
+        boardX = self._window.getWidth() / 2
+        boardY = self._window.getHeight() / 2
         self._board = BoardUI(Point(boardX, boardY), int(min(boardX, boardY)), boardSize)
-        self._board.draw(window)
-
-def main():
-    win = GraphWin("board test", 800, 600)
-    print("creating game")
-    p1 = HumanUI(win, "Gabe 1")
-    p2 = HumanUI(win, "Gabe 2")
-    game = GameUI(p1, p2, win, 3)
-    print("making move")
-    game.playGame(logfile=None)
-    win.getMouse()
-    win.close()
-
-
-if __name__ == "__main__":
-    main()
+        self._board.draw(self._window)

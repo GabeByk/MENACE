@@ -8,8 +8,7 @@ from Game import Game
 from MENACE import MENACE
 from Human import Human
 from Player import Player
-from graphics import GraphWin
-from Drawables import GameUI, HumanUI
+from Drawables import GameUI
 
 
 def menaceVsMenace(iterations, menace1File: str | None = None, menace2File: str | None = None, size: int = 3) -> None:
@@ -77,30 +76,11 @@ gameLogs = "5x5 test.txt"
 def trainMenace(file1: str = "Menace 1.txt", file2: str = "Menace 2.txt", size: int = 3, rounds: int = 500):
     menaceVsMenace(rounds, file1, file2, size)
 
-def humanVsMenaceGUI(humanName: str = "", menaceFile: str = "", humanFirst: bool = True, boardSize: int = 3):
-    window = GraphWin(f"{humanName} VS {menaceFile}", 800, 600)
-    human = HumanUI(window, humanName)
-    try:
-        menace = MENACE.fromFile(menaceFile)
-    except FileNotFoundError:
-        menace = MENACE(menaceFile[:-4])
-    if humanFirst:
-        player1 = human
-        player2 = menace
-    else:
-        player1 = menace
-        player2 = human
-    game = GameUI(player1, player2, window, boardSize)
-    winner = game.playGame()
-    menace.learn(winner)
-    menace.save(menaceFile)
-    window.close()
-
 def main():
-    size = 3
-    humanVsMenaceGUI("Gabe", "Second GUI MENACE.txt", True, size)
-    # menaceVsMenace(500, "First GUI MENACE.txt", "Second GUI MENACE.txt", size)
-    # humanVsMenaceGUI("Gabe", "Second GUI MENACE.txt", True)
+    g = GameUI()
+    # GameUI includes a quit button that will exit the program after each game if clicked
+    while True:
+        g.playGame()
 
 
 if __name__ == "__main__":

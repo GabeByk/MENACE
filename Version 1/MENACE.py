@@ -28,15 +28,18 @@ class MENACE(Player):
 
     @classmethod
     def fromFile(cls, filename: str) -> MENACE:
-        with open(filename, "r") as infile:
-            # the first line is 'name: symbol'
-            name, symbol = infile.readline().split(": ")
-            menace = MENACE(name, symbol)
-            # the rest is one line per matchbox
-            for line in infile:
-                if len(line) > 2:
-                    matchbox = Matchbox.fromString(line)
-                    menace._matchboxes[matchbox.label()] = matchbox
+        try:
+            with open(filename, "r") as infile:
+                # the first line is 'name: symbol'
+                name, symbol = infile.readline().split(": ")
+                menace = MENACE(name, symbol)
+                # the rest is one line per matchbox
+                for line in infile:
+                    if len(line) > 2:
+                        matchbox = Matchbox.fromString(line)
+                        menace._matchboxes[matchbox.label()] = matchbox
+        except FileNotFoundError:
+            menace = MENACE(filename[:-4])
         return menace
 
     def makeMove(self, board: Board) -> None:
