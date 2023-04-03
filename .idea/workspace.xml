@@ -4,29 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f551a5fb-ad2e-4f94-87a7-2fe0a95523a3" name="Changes" comment="Minimum viable product pretty much achieved; all that's left is polish, including the ability to choose humans/MENACEs from the window, clearer communication when a move is illegal, etc.">
+    <list default="true" id="f551a5fb-ad2e-4f94-87a7-2fe0a95523a3" name="Changes" comment="Functioning product achieved. A bit of polish to the GUI would be nice (e.g. labels for the input screen, turn indicator), but not required">
+      <change afterPath="$PROJECT_DIR$/Version 1/Carl.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Version 1/Gabe.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Version 1/MENACE 2.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Version 1/MENACE.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Version 1/gameLogs.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Version 1/5x5 MENACE Test 1.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Version 1/5x5 MENACE Test 2.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Version 1/5x5 Menace 1.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Version 1/5x5 Menace 2.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Version 1/5x5 Menace 3.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Version 1/5x5 Menace 4.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Version 1/5x5 test.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Version 1/Drawables.py" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/Drawables.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Version 1/First GUI MENACE.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Version 1/MENACE First vs Human.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Version 1/MENACE Second vs Human.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Version 1/MENACE.py" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/MENACE.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Version 1/Matchbox.py" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/Matchbox.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Version 1/Menace 1.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Version 1/Menace 2.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Version 1/Menace 3.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Version 1/Menace A.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Version 1/Menace B.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Version 1/Second GUI MENACE.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Version 1/gameLogs.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Version 1/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Version 1/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,7 +50,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;/Users/gabe/Desktop/MENACE&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.ide.settings.new.ui&quot;
   }
 }</component>
   <component name="RecentsManager">
@@ -91,7 +76,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Version 1/Board.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Board.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -112,7 +97,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Version 1/Drawables.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Drawables.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -154,7 +139,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Version 1/main.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -364,7 +349,14 @@
       <option name="project" value="LOCAL" />
       <updated>1677796412869</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="Functioning product achieved. A bit of polish to the GUI would be nice (e.g. labels for the input screen, turn indicator), but not required">
+      <created>1679341162363</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1679341162363</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -404,7 +396,8 @@
     <MESSAGE value="Significantly improved performance issues and fixed bugs.&#10;Performance:&#10;MENACE now uses a dictionary to store matchboxes, which significantly improved lookup times. Applying transformations to boards seems to be the current bottleneck for performance, so optimizations should be focused there if desired, however current performance seems acceptable: 500 games can be played between two MENACES on my Macbook in under 20 seconds.&#10;Bugs:&#10;A bug was found in the BinarySearchTree which caused existing matchboxes to not be found when requested; this led to many matchboxes for the same board state. The primary issue was fixed, but some duplicate board states were still found by duplicateChecker.py; no duplicate states have been found since switching away from the Binary Search Tree, so it is likely the culprit." />
     <MESSAGE value="Improved Transformation.transformedPoint, which brought the performance the rest of the way to more or less matching the Prototype's." />
     <MESSAGE value="Minimum viable product pretty much achieved; all that's left is polish, including the ability to choose humans/MENACEs from the window, clearer communication when a move is illegal, etc." />
-    <option name="LAST_COMMIT_MESSAGE" value="Minimum viable product pretty much achieved; all that's left is polish, including the ability to choose humans/MENACEs from the window, clearer communication when a move is illegal, etc." />
+    <MESSAGE value="Functioning product achieved. A bit of polish to the GUI would be nice (e.g. labels for the input screen, turn indicator), but not required" />
+    <option name="LAST_COMMIT_MESSAGE" value="Functioning product achieved. A bit of polish to the GUI would be nice (e.g. labels for the input screen, turn indicator), but not required" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -126,16 +126,16 @@ class BoardUI(Board):
 
 
     def draw(self, win: GraphWin) -> None:
-        for separator in self._separators:
-            separator.draw(win)
         for cell in self._cells:
             cell.draw(win)
+        for separator in self._separators:
+            separator.draw(win)
 
     def undraw(self) -> None:
-        for separator in self._separators:
-            separator.undraw()
         for cell in self._cells:
             cell.undraw()
+        for separator in self._separators:
+            separator.undraw()
 
 class HumanUI(Human):
     """
