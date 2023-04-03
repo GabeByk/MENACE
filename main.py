@@ -80,7 +80,7 @@ def main():
     g = GameUI()
     # GameUI includes a quit button that will exit the program after each game if clicked
     while True:
-        g.playGame()
+        g.startGames()
 
 
 if __name__ == "__main__":

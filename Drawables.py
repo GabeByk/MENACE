@@ -161,20 +161,45 @@ class HumanUI(Human):
     def _reportIllegalMove(self) -> None:
         self._errorMessage.setText("That move was illegal. Please try again.")
 
+class SwitchButton(Button):
+    _labels: list[str]
+    _labelIndex: int
+
+    def __init__(self, center: Point, width: int, height: int, labels: list[str]):
+        super().__init__(center, width, height, labels[0])
+        self._labels = labels
+        self._labelIndex = 0
+
+    def processClick(self, click: Point) -> bool:
+        clicked = self.isClicked(click)
+        if clicked:
+            self.advance()
+        return clicked
+
+    def getText(self) -> str:
+        return self._label.getText()
+
+    def advance(self) -> None:
+        self._labelIndex += 1
+        self._labelIndex %= len(self._labels)
+        self._label.setText(self._labels[self._labelIndex])
+
 class PlayerSelector:
     _name: Entry
-    _type: Entry
+    _type: SwitchButton
+    _types: list[str] = ["Human", "MENACE"]
 
     def __init__(self, center: Point) -> None:
         self._name = Entry(Point(center.x - 100, center.y), 20)
-        self._name.setText("Enter name")
-        self._type = Entry(Point(center.x + 100, center.y), 20)
-        self._type.setText("Enter type")
-        for entry in (self._name, self._type):
-            entry.setFill(color_rgb(225, 225, 225))
+        self._name.setText("")
+        self._type = SwitchButton(Point(center.x + 100, center.y), 100, 25, PlayerSelector._types)
+        self._name.setFill(color_rgb(225, 225, 225))
 
     def getPlayer(self) -> tuple[str, str]:
         return self._type.getText(), self._name.getText()
+
+    def processClick(self, click: Point) -> None:
+        self._type.processClick(click)
 
     def draw(self, window: GraphWin) -> None:
         self._name.draw(window)
@@ -195,6 +220,9 @@ class GameUI(Game):
     _boardSizeEntry: Entry
     _submitButton: Button
     _quitButton: Button
+    _playAgain: Button
+    _returnToMenu: Button
+    _train: SwitchButton
 
     def __init__(self):
         # call super's init here to make PyCharm happy; it will be called again from startGame
@@ -209,15 +237,85 @@ class GameUI(Game):
         self._errorMessage.draw(self._window)
         self._submitButton = Button(Point(400 - 75, 500), 125, 50, "Submit")
         self._quitButton = Button(Point(400 + 75, 500), 125, 50, "Quit")
+        self._playAgain = Button(Point(400 - 75, 500), 125, 50, "Play Again")
+        self._returnToMenu = Button(Point(400 + 75, 500), 125, 50, "Return to Setup")
+        self._train = SwitchButton(Point(400, 550), 125, 25, ["Train", "Press ESC to Stop"])
 
-    def playGame(self, logfile: str | None = "gameLogs.txt") -> str | None:
+    def winner(self) -> str:
+        winner = self._board.winner()
+        if winner == Move.CROSS:
+            return f"{self._players[0].name()} won!"
+        elif winner is None:
+            return "Tie!"
+        else:
+            return f"{self._players[1].name()} won!"
+
+    def train(self, logfile: str | None = "gameLogs.txt") -> None:
+        key = self._window.checkKey()
+        while key is None or key != "Escape":
+            results = self.playGame(logfile)
+            self._errorMessage.setText(self.winner())
+            self._teachPlayers(results)
+            key = self._window.checkKey()
+        self._train.advance()
+
+    def startGames(self, logfile: str | None = "gameLogs.txt"):
+        # perform setup for the game
         self._setupGame()
         self._startGame()
+
+        # play the game
         results = super().playGame(logfile)
+
+        # ask if we should play again, train any MENACEs, or return to setup
+        self._playAgain.draw(self._window)
+        self._returnToMenu.draw(self._window)
+        self._train.draw(self._window)
+        self._errorMessage.setText(self.winner())
+        p = self._window.getMouse()
+        while True:
+            if self._playAgain.isClicked(p):
+                # if we're playing again, make any MENACEs learn from the results
+                self._teachPlayers(results)
+                # reset the GUI to before the game ended
+                self._playAgain.undraw()
+                self._returnToMenu.undraw()
+                self._train.undraw()
+                self._errorMessage.setText("")
+                # play another game
+                results = super().playGame(logfile)
+                # reset the GUI for another game to be over
+                self._errorMessage.setText(self.winner())
+                self._playAgain.draw(self._window)
+                self._returnToMenu.draw(self._window)
+                self._train.draw(self._window)
+
+            elif self._returnToMenu.isClicked(p):
+                self._playAgain.undraw()
+                self._returnToMenu.undraw()
+                self._train.undraw()
+                self._returnToSetup()
+                break
+
+            elif self._train.isClicked(p):
+                self._train.processClick(p)
+                self._playAgain.undraw()
+                self._returnToMenu.undraw()
+                self._errorMessage.setText("")
+                self.train()
+                self._errorMessage.setText(self.winner())
+                self._playAgain.draw(self._window)
+                self._returnToMenu.draw(self._window)
+            p = self._window.getMouse()
+
+        self._teachPlayers(results)
+    def _returnToSetup(self) -> None:
         self._board.undraw()
         self._errorMessage.setText("")
+
+    def _teachPlayers(self, results: str | None) -> None:
         if isinstance(self._players[0], MENACE):
-            # i'm not sure how to convince PyCharm that this is acceptable
+            # i'm not sure how to convince PyCharm that players[0] is a MENACE
             player: MENACE = self._players[0]
             player.learn(results)
             player.save(player.name() + ".txt")
@@ -225,43 +323,54 @@ class GameUI(Game):
             player: MENACE = self._players[1]
             player.learn(results)
             player.save(player.name() + ".txt")
-        return results
 
     def _setupGame(self) -> None:
         """
         Waits for data from the user and ensures that it's valid, or quits the game
         """
-        validPlayers = ("HUMAN", "MENACE")
-        self._window.redraw()
+        self._window.update()
+        nameColumn = Text(Point(300, 250), "Player Name")
+        nameColumn.draw(self._window)
+        typeColumn = Text(Point(500, 250), "Player Type")
+        typeColumn.draw(self._window)
+        sizeLabel = Text(Point(300, 400), "Board Size (n by n):")
+        sizeLabel.draw(self._window)
         self._player1Selector.draw(self._window)
         self._player2Selector.draw(self._window)
         self._boardSizeEntry.draw(self._window)
         self._submitButton.draw(self._window)
         self._quitButton.draw(self._window)
+
         while True:
             p = self._window.getMouse()
             while not self._submitButton.isClicked(p) and not self._quitButton.isClicked(p):
+                self._player1Selector.processClick(p)
+                self._player2Selector.processClick(p)
                 p = self._window.getMouse()
             if self._quitButton.isClicked(p):
                 self._window.close()
                 exit()
-            player1Data = self._player1Selector.getPlayer()
-            player2Data = self._player2Selector.getPlayer()
-            boardSize = self._boardSizeEntry.getText()
-            # if int(boardSize) doesn't work, skip the rest and loop again
-            try:
-                if int(boardSize) < 0:
-                    self._errorMessage.setText("Please enter a valid board size.")
-                    continue
-            except ValueError:
-                self._errorMessage.setText("Please enter a valid board size.")
-                continue
-            if player1Data[0].upper() in validPlayers and player2Data[0].upper() in validPlayers:
-                break
-            elif player2Data[0].upper() in validPlayers:
-                self._errorMessage.setText("Please enter a valid type of player for player 1. The supported types are Human and MENACE.")
+            # check that the players' names aren't empty
+            player1Name = self._player1Selector.getPlayer()[1]
+            player2Name = self._player2Selector.getPlayer()[1]
+            if player1Name != "" and player2Name != "":
+                boardSize = self._boardSizeEntry.getText()
+                # if int(boardSize) doesn't work, restart the loop and try again; otherwise break
+                try:
+                    if int(boardSize) <= 0:
+                        self._errorMessage.setText("Please enter a positive board size.")
+                    else:
+                        break
+                except ValueError:
+                    self._errorMessage.setText("Please enter a positive integer board size.")
+            elif player1Name == "":
+                self._errorMessage.setText("Please enter a name for Player 1.")
             else:
-                self._errorMessage.setText("Please enter a valid type of player for player 2. The supported types are Human and MENACE.")
+                self._errorMessage.setText("Please enter a name for Player 2.")
+
+        nameColumn.undraw()
+        typeColumn.undraw()
+        sizeLabel.undraw()
         self._player1Selector.undraw()
         self._player2Selector.undraw()
         self._boardSizeEntry.undraw()
@@ -270,13 +379,15 @@ class GameUI(Game):
         self._quitButton.undraw()
 
     def _startGame(self) -> None:
-        self._window.redraw()
+        self._window.update()
         players: list[Player] = []
         for playerType, playerName in (self._player1Selector.getPlayer(), self._player2Selector.getPlayer()):
-            if playerType.lower() == "human":
+            if playerType.upper() == "HUMAN":
                 players.append(HumanUI(self._window, self._errorMessage, playerName))
             elif playerType.upper() == "MENACE":
                 players.append(MENACE.fromFile(playerName + ".txt"))
+            print(players[-1].name())
+
 
         boardSize = int(self._boardSizeEntry.getText())
         super().__init__(players[0], players[1], boardSize)
