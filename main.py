@@ -73,8 +73,10 @@ def readLogs(filename: str = "gameLogs.txt"):
 
 gameLogs = "5x5 test.txt"
 
+
 def trainMenace(file1: str = "Menace 1.txt", file2: str = "Menace 2.txt", size: int = 3, rounds: int = 500):
     menaceVsMenace(rounds, file1, file2, size)
+
 
 def main():
     g = GameUI()

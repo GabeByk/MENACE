@@ -246,9 +246,9 @@ class GameUI(Game):
         # call super's init here to make PyCharm happy; it will be called again from startGame
         super().__init__(Player(), Player(), 1)
         self._window = GraphWin("MENACE", 800, 600)
-        self._player1Selector = PlayerSelector(Point(400, 300))
-        self._player2Selector = PlayerSelector(Point(400, 350))
-        self._boardSizeEntry = Entry(Point(400, 400), 5)
+        self._player1Selector = PlayerSelector(Point(400, 250))
+        self._player2Selector = PlayerSelector(Point(400, 300))
+        self._boardSizeEntry = Entry(Point(400, 350), 5)
         self._boardSizeEntry.setText("3")
         self._boardSizeEntry.setFill(color_rgb(225, 225, 225))
         self._errorMessage = Text(Point(400, 462.5), "")
@@ -257,7 +257,7 @@ class GameUI(Game):
         self._quitButton = Button(Point(400 + 75, 500), 125, 50, "Quit")
         self._playAgain = Button(Point(400 - 75, 500), 125, 50, "Play Again")
         self._returnToMenu = Button(Point(400 + 75, 500), 125, 50, "Return to Setup")
-        self._train = SwitchButton(Point(400, 550), 125, 25, ["Train", "Press ESC to Stop"])
+        self._train = SwitchButton(Point(400, 550), 150, 25, ["Train", "Press ESC to Stop"])
 
     def winner(self) -> str:
         winner = self._board.winner()
@@ -347,11 +347,11 @@ class GameUI(Game):
         Waits for data from the user and ensures that it's valid, or quits the game
         """
         self._window.update()
-        nameColumn = Text(Point(300, 250), "Player Name")
+        nameColumn = Text(Point(300, 200), "Player Name")
         nameColumn.draw(self._window)
-        typeColumn = Text(Point(500, 250), "Player Type")
+        typeColumn = Text(Point(500, 200), "Player Type")
         typeColumn.draw(self._window)
-        sizeLabel = Text(Point(300, 400), "Board Size (n by n):")
+        sizeLabel = Text(Point(300, 350), "Board Size (n by n):")
         sizeLabel.draw(self._window)
         self._player1Selector.draw(self._window)
         self._player2Selector.draw(self._window)
