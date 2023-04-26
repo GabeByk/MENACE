@@ -41,10 +41,14 @@ class BoardUI(Board):
     """
     A modified version of the Board that works with a GUI.
     """
+    COLUMN_LABELS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    ROW_LABELS = [i + 1 for i in range(len(COLUMN_LABELS))]
+
     _center: Point
     _width: int
     _cells: list[Text]
     _separators: list[Line]
+    _labels: list[Text]
 
     def __init__(self, center: Point, width: int, size: int = 3):
         """
@@ -57,6 +61,7 @@ class BoardUI(Board):
         self._width = width
         self._cells = []
         self._separators = []
+        self._labels = []
         super().__init__(size)
         self._generateUI()
 
@@ -70,12 +75,21 @@ class BoardUI(Board):
         cellCenter = Point(initialCenter[0], initialCenter[1])
         # create the cells
         for rowNumber in range(self._size):
+            # create the label for this row
+            label = Text(Point(cellCenter.x - cellSpacing, cellCenter.y), BoardUI.ROW_LABELS[rowNumber])
+            label.setSize(int(max(min(cellSpacing, 36) - 8, 5)))
+            self._labels.append(label)
+            # create the cells for this row
             for columnNumber in range(self._size):
-                # create the vertical separator line during the first row
-                if columnNumber != 0 and rowNumber == 0:
-                    separator = Line(Point(cellCenter.x - cellSpacing / 2, self._center.y - self._width / 2),
-                                     Point(cellCenter.x - cellSpacing / 2, self._center.y + self._width / 2))
-                    self._separators.append(separator)
+                # create the column labels and separator lines for the first row
+                if rowNumber == 0:
+                    label = Text(Point(cellCenter.x, cellCenter.y - cellSpacing), BoardUI.COLUMN_LABELS[columnNumber])
+                    label.setSize(int(max(min(cellSpacing, 36 - 8), 5)))
+                    self._labels.append(label)
+                    if columnNumber != 0:
+                        separator = Line(Point(cellCenter.x - cellSpacing / 2, self._center.y - self._width / 2),
+                                         Point(cellCenter.x - cellSpacing / 2, self._center.y + self._width / 2))
+                        self._separators.append(separator)
                 # create the symbol
                 symbol = self._grid[columnNumber + self._size * rowNumber]
                 if symbol == "_":
@@ -130,12 +144,16 @@ class BoardUI(Board):
             cell.draw(win)
         for separator in self._separators:
             separator.draw(win)
+        for label in self._labels:
+            label.draw(win)
 
     def undraw(self) -> None:
         for cell in self._cells:
             cell.undraw()
         for separator in self._separators:
             separator.undraw()
+        for label in self._labels:
+            label.undraw()
 
 class HumanUI(Human):
     """
@@ -233,7 +251,7 @@ class GameUI(Game):
         self._boardSizeEntry = Entry(Point(400, 400), 5)
         self._boardSizeEntry.setText("3")
         self._boardSizeEntry.setFill(color_rgb(225, 225, 225))
-        self._errorMessage = Text(Point(400, 450), "")
+        self._errorMessage = Text(Point(400, 462.5), "")
         self._errorMessage.draw(self._window)
         self._submitButton = Button(Point(400 - 75, 500), 125, 50, "Submit")
         self._quitButton = Button(Point(400 + 75, 500), 125, 50, "Quit")
@@ -386,7 +404,6 @@ class GameUI(Game):
                 players.append(HumanUI(self._window, self._errorMessage, playerName))
             elif playerType.upper() == "MENACE":
                 players.append(MENACE.fromFile(playerName + ".txt"))
-            print(players[-1].name())
 
 
         boardSize = int(self._boardSizeEntry.getText())

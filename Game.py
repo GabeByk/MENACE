@@ -42,18 +42,18 @@ class Game:
             self._players[turns % 2].makeMove(self._board)
             turns += 1
         logs.append(str(self._board))
-        if isinstance(self._players[0], Human) or isinstance(self._players[1], Human):
-            print(self._board)
+        # if isinstance(self._players[0], Human) or isinstance(self._players[1], Human):
+        #     print(self._board)
         winner = self._board.winner()
         if winner is not None:
-            print(f"{self._players[turns % 2 - 1].name()} won playing {winner} in {turns} turns!")
+            # print(f"{self._players[turns % 2 - 1].name()} won playing {winner} in {turns} turns!")
             logs.append(f"{self._players[turns % 2 - 1].name()} won playing {winner} in {turns} turns!")
         else:
-            print(f"Draw in {turns} turns!")
+            # print(f"Draw in {turns} turns!")
             logs.append(f"Draw in {turns} turns!")
         if logfile is not None:
             with open(logfile, "a") as outfile:
                 print("\n".join(logs), file=outfile)
-        else:
-            print(logs)
+        # else:
+            # print(logs)
         return winner
