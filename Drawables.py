@@ -25,6 +25,7 @@ class Button:
         bottomRight = Point(center.x + width / 2, center.y + height / 2)
         self._border = Rectangle(topLeft, bottomRight)
         self._label = Text(center, label)
+        self._label.setSize(25)
 
     def isClicked(self, click: Point) -> bool:
         return self._border.p1.x <= click.x <= self._border.p2.x and self._border.p1.y <= click.y <= self._border.p2.y
@@ -208,9 +209,10 @@ class PlayerSelector:
     _types: list[str] = ["Human", "MENACE"]
 
     def __init__(self, center: Point) -> None:
-        self._name = Entry(Point(center.x - 100, center.y), 20)
+        self._name = Entry(Point(center.x - 100, center.y), 15)
+        self._name.setSize(25)
         self._name.setText("")
-        self._type = SwitchButton(Point(center.x + 100, center.y), 100, 25, PlayerSelector._types)
+        self._type = SwitchButton(Point(center.x + 100, center.y), 125, 35, PlayerSelector._types)
         self._name.setFill(color_rgb(225, 225, 225))
 
     def getPlayer(self) -> tuple[str, str]:
@@ -248,16 +250,18 @@ class GameUI(Game):
         self._window = GraphWin("MENACE", 800, 600)
         self._player1Selector = PlayerSelector(Point(400, 250))
         self._player2Selector = PlayerSelector(Point(400, 300))
-        self._boardSizeEntry = Entry(Point(400, 350), 5)
+        self._boardSizeEntry = Entry(Point(400, 350), 2)
+        self._boardSizeEntry.setSize(25)
         self._boardSizeEntry.setText("3")
         self._boardSizeEntry.setFill(color_rgb(225, 225, 225))
-        self._errorMessage = Text(Point(400, 462.5), "")
+        self._errorMessage = Text(Point(400, 450), "")
+        self._errorMessage.setSize(25)
         self._errorMessage.draw(self._window)
-        self._submitButton = Button(Point(400 - 75, 500), 125, 50, "Submit")
-        self._quitButton = Button(Point(400 + 75, 500), 125, 50, "Quit")
-        self._playAgain = Button(Point(400 - 75, 500), 125, 50, "Play Again")
-        self._returnToMenu = Button(Point(400 + 75, 500), 125, 50, "Return to Setup")
-        self._train = SwitchButton(Point(400, 550), 150, 25, ["Train", "Press ESC to Stop"])
+        self._submitButton = Button(Point(400 - 100, 500), 145, 50, "Submit")
+        self._quitButton = Button(Point(400 + 100, 500), 145, 50, "Quit")
+        self._playAgain = Button(Point(400 - 100, 500), 145, 50, "Play Again")
+        self._returnToMenu = Button(Point(400 + 100, 500), 200, 50, "Return to Setup")
+        self._train = SwitchButton(Point(400, 550), 250, 35, ["Train", "Press ESC to Stop"])
 
     def winner(self) -> str:
         winner = self._board.winner()
@@ -270,7 +274,7 @@ class GameUI(Game):
 
     def train(self, logfile: str | None = "gameLogs.txt") -> None:
         key = self._window.checkKey()
-        while key is None or key != "Escape":
+        while key != "Escape":
             results = self.playGame(logfile)
             self._errorMessage.setText(self.winner())
             self._teachPlayers(results)
@@ -284,6 +288,7 @@ class GameUI(Game):
 
         # play the game
         results = super().playGame(logfile)
+        self._teachPlayers(results)
 
         # ask if we should play again, train any MENACEs, or return to setup
         self._playAgain.draw(self._window)
@@ -293,8 +298,6 @@ class GameUI(Game):
         p = self._window.getMouse()
         while True:
             if self._playAgain.isClicked(p):
-                # if we're playing again, make any MENACEs learn from the results
-                self._teachPlayers(results)
                 # reset the GUI to before the game ended
                 self._playAgain.undraw()
                 self._returnToMenu.undraw()
@@ -302,6 +305,7 @@ class GameUI(Game):
                 self._errorMessage.setText("")
                 # play another game
                 results = super().playGame(logfile)
+                self._teachPlayers(results)
                 # reset the GUI for another game to be over
                 self._errorMessage.setText(self.winner())
                 self._playAgain.draw(self._window)
@@ -316,7 +320,7 @@ class GameUI(Game):
                 break
 
             elif self._train.isClicked(p):
-                self._train.processClick(p)
+                self._train.advance()
                 self._playAgain.undraw()
                 self._returnToMenu.undraw()
                 self._errorMessage.setText("")
@@ -348,10 +352,13 @@ class GameUI(Game):
         """
         self._window.update()
         nameColumn = Text(Point(300, 200), "Player Name")
+        nameColumn.setSize(25)
         nameColumn.draw(self._window)
         typeColumn = Text(Point(500, 200), "Player Type")
+        typeColumn.setSize(25)
         typeColumn.draw(self._window)
-        sizeLabel = Text(Point(300, 350), "Board Size (n by n):")
+        sizeLabel = Text(Point(250, 350), "Board Size (n by n):")
+        sizeLabel.setSize(25)
         sizeLabel.draw(self._window)
         self._player1Selector.draw(self._window)
         self._player2Selector.draw(self._window)
@@ -409,6 +416,6 @@ class GameUI(Game):
         boardSize = int(self._boardSizeEntry.getText())
         super().__init__(players[0], players[1], boardSize)
         boardX = self._window.getWidth() / 2
-        boardY = self._window.getHeight() / 2
+        boardY = self._window.getHeight() / 2 - 25
         self._board = BoardUI(Point(boardX, boardY), int(min(boardX, boardY)), boardSize)
         self._board.draw(self._window)

@@ -59,7 +59,6 @@ class Board:
         """
         if self.legalMove(move):
             row, column = move.position()
-            # move's row and column numbers are 1 off of the index, so we need to adjust them
             self._grid[column + row * self._size] = move.symbol()
         else:
             raise IllegalMoveError(f"Move {move} is illegal with game state: \n{self}")
@@ -104,6 +103,7 @@ class Board:
                     won = won and self._grid[column + self._size * row] == winner
                 if won:
                     return winner
+
         # check for a winner in the diagonals
         # grab the first entry of the diagonal
         mainDiagonalWinner = self._grid[0]
@@ -144,7 +144,7 @@ class Board:
         Applies the given Transformation to this Board.
         :param t: the Transformation to apply
         """
-        # self._grid[destinations[i]] should be replaced with self._grid[i]
+        # calculate where each symbol needs to go
         destinations: list[int] = []
         for row in range(self._size):
             for column in range(self._size):
@@ -154,6 +154,8 @@ class Board:
                 # transfer from point space back to row/column space
                 newRow, newColumn = round(self._size - 1 - y), round(x)
                 destinations.append(newColumn + newRow * self._size)
+
+        # convert to cycle form
         cycles: list[list[int]] = []
         processed: set[int] = set()
         for origin, destination in enumerate(destinations):
@@ -166,6 +168,8 @@ class Board:
                 cycles.append(cycle)
             processed.add(origin)
             processed.add(destination)
+
+        # apply the cycle by using swaps, so self._swap can be overridden to do more things (e.g. update GUI)
         for cycle in cycles:
             while len(cycle) > 1:
                 destination = cycle.pop()

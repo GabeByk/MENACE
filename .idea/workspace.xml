@@ -4,13 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f551a5fb-ad2e-4f94-87a7-2fe0a95523a3" name="Changes" comment="Removed additional testing MENACE files.">
-      <change beforePath="$PROJECT_DIR$/.idea/MENACE.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/MENACE.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="f551a5fb-ad2e-4f94-87a7-2fe0a95523a3" name="Changes" comment="Added ABC/123 labels like chess; ready to train overnight for demo">
+      <change afterPath="$PROJECT_DIR$/MENACE 2.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MENACE.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gameLogs.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Board.py" beforeDir="false" afterPath="$PROJECT_DIR$/Board.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Drawables.py" beforeDir="false" afterPath="$PROJECT_DIR$/Drawables.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Menaces.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Menaces.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/duplicateChecker.py" beforeDir="false" afterPath="$PROJECT_DIR$/duplicateChecker.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Overnight Menace 1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Overnight Menace 1.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Overnight Menace 2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Overnight Menace 2.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -51,17 +53,18 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Version-1&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/gabe/Desktop/MENACE&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "full.screen.before.presentation.mode": "false",
+    "git-widget-placeholder": "Version-1",
+    "last_opened_file_path": "/Users/gabe/Desktop/MENACE",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\gabej\PycharmProjects\MENACE\Version 1" />
@@ -143,9 +146,10 @@
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="" />
+      <option name="SDK_HOME" value="/usr/local/bin/python3.11" />
+      <option name="SDK_NAME" value="Python 3.11" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
+      <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
